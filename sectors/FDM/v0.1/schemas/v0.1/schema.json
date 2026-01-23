@@ -1,0 +1,18 @@
+{
+    "manifest": {
+        "schemaType": "sector",
+        "schemaVersion": "0.1",
+        "schemaAuthors": [
+            "The Laminode Team"
+        ],
+        "lastUpdated": "2026-02-01",
+        "targetAppSector": "FDM"
+    },
+    "availableParameters": [
+        {
+            "name": "global_parameter_one",
+            "title": "Global Parameter One",
+            "description": "This is a standard global parameter for FDM printing."
+        }
+    ]
+}
