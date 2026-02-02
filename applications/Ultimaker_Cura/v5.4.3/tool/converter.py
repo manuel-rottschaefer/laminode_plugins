@@ -1,5 +1,7 @@
 import json
 import os
+import re
+import argparse
 from datetime import datetime
 
 # Mapping of Cura units to LamiNode quantity structures
@@ -25,34 +27,141 @@ TYPE_MAPPING = {
     "enum": "option",
 }
 
-def get_quantity(cura_setting):
-    """Determines the LamiNode quantity based on Cura unit or type."""
-    unit = cura_setting.get('unit')
-    if unit in UNIT_MAPPING:
-        return UNIT_MAPPING[unit]
+DEFAULT_COLOR = "blue"
+
+# Rainbow colors in spectral order, matching LamiColor enum
+RAINBOW_COLORS = [
+    "red", "crimson", "deepOrange", "orange", "amber", "gold", "yellow", 
+    "lime", "lightGreen", "green", "emerald", "teal", "cyan", "lightBlue", 
+    "blue", "indigo", "deepPurple", "violet", "purple", "pink"
+]
+
+def get_param_attributes(cura_setting):
+    """Determines the LamiNode parameter type to be merged into the parameter."""
+    attributes = {}
     
-    # Fallback to type-based name if no unit is found
+    # 1. Determine Type (semantic quantity name or generic type)
     cura_type = cura_setting.get('type')
-    mapped_name = TYPE_MAPPING.get(cura_type, "generic")
+    unit = cura_setting.get('unit')
+    
+    if unit in UNIT_MAPPING:
+        attributes['type'] = UNIT_MAPPING[unit]['name']
+    elif cura_type == 'bool':
+        attributes['type'] = 'boolean'
+    elif cura_type == 'enum' or cura_type == 'str':
+        attributes['type'] = 'choice'
+    elif cura_type == 'int':
+        attributes['type'] = 'integer'
+    elif cura_type == 'float':
+        attributes['type'] = 'float'
+    else:
+        attributes['type'] = 'numeric' # Default fallback
+
+    # 2. Extract Options for enums
+    if cura_type == 'enum' and 'options' in cura_setting:
+         options = cura_setting['options']
+         if isinstance(options, dict):
+             attributes['options'] = list(options.keys())
+         elif isinstance(options, list):
+             attributes['options'] = options
+
+    return attributes
+
+def _transpile_expression(expr):
+    """Transpiles Python expression to JavaScript."""
+    if not isinstance(expr, str):
+        return str(expr).lower() if isinstance(expr, bool) else str(expr)
+    
+    # Remove unsupported functions
+    # resolveOrValue('setting') -> setting
+    expr = re.sub(r"resolveOrValue\('([^']+)'\)", r"\1", expr)
+    expr = re.sub(r'resolveOrValue\("([^"]+)"\)', r"\1", expr)
+    
+    # extruderValue(nr, 'setting') -> setting
+    expr = re.sub(r"extruderValue\([^,]+,\s*'([^']+)'\)", r"\1", expr)
+    expr = re.sub(r'extruderValue\([^,]+,\s*"([^"]+)"\)', r"\1", expr)
+    
+    # Replace math module
+    expr = expr.replace("math.", "Math.")
+
+    # 1. Transform function calls
+    # extruderValues('setting') -> [setting] (Simulate list for single extruder)
+    expr = re.sub(r"extruderValues\('([^']+)'\)", r"[\1]", expr)
+    expr = re.sub(r'extruderValues\("([^"]+)"\)', r"[\1]", expr)
+    
+    # len(x) -> (x).length
+    # Note: Regex tries to match balanced parens simply
+    expr = re.sub(r"\blen\(([^)]+)\)", r"(\1).length", expr)
+
+    # sum(x) -> (x).reduce((a, b) => a + b, 0)
+    # This assumes x is an array (like from extruderValues or manual list)
+    expr = re.sub(r"\bsum\(([^)]+)\)", r"(\1).reduce((a, b) => a + b, 0)", expr)
+    
+    # an(x) -> (x).some(e => e)
+    expr = re.sub(r"\bany\(([^)]+)\)", r"(\1).some(e => e)", expr)
+
+    # max(iterable) -> Math.max(...iterable)
+    # max(a, b) -> Math.max(a, b) 
+    # Use simple heuristic: if comma in args, assume distinct args, else spread
+    def replace_max(match):
+        args = match.group(1)
+        if "," in args:
+            return f"Math.max({args})"
+        return f"Math.max(...{args})"
+    expr = re.sub(r"\bmax\(([^)]+)\)", replace_max, expr)
+
+    # min(iterable) -> Math.min(...iterable)
+    # min(a, b) -> Math.min(a, b)
+    def replace_min(match):
+        args = match.group(1)
+        if "," in args:
+            return f"Math.min({args})"
+        return f"Math.min(...{args})"
+    expr = re.sub(r"\bmin\(([^)]+)\)", replace_min, expr)
+
+    # Replace Python operators
+    # Note: simple replacement, might need more robust parsing for complex cases
+    expr = expr.replace(" and ", " && ")
+    expr = expr.replace(" or ", " || ")
+    expr = expr.replace(" not ", " ! ")
+    
+    # Replace Python constants
+    expr = expr.replace("True", "true")
+    expr = expr.replace("False", "false")
+    expr = expr.replace("None", "null")
+
+    # Handle ternary: "A if B else C" -> "B ? A : C"
+    # This is a basic regex and won't handle nested ternaries correctly without a parser
+    ternary_pattern = re.compile(r"(.+?)\s+if\s+(.+?)\s+else\s+(.+)")
+    match = ternary_pattern.search(expr)
+    if match:
+        expr = f"{match.group(2)} ? {match.group(1)} : {match.group(3)}"
+        
+    return expr
+
+def _get_expression(target_name, value):
+    """Formats an expression object for the schema."""
+    expr = _transpile_expression(value)
     
     return {
-        "name": mapped_name,
-        "unit": "none",
-        "symbol": ""
+        "target": target_name,
+        "expression": expr
     }
 
-def convert_settings(settings_dict, categories, parameters, parent_category=None):
+def convert_settings(settings_dict, categories, parameters, parent_category=None, ancestors=None):
     """Recursively traverses Cura settings to extract categories and parameters."""
+    if ancestors is None:
+        ancestors = []
+        
     for key, value in settings_dict.items():
         if value.get('type') == 'category':
             category_name = key
             categories.append({
                 "name": category_name,
                 "title": value.get('label', key),
-                "color": "blue"
             })
             if 'children' in value:
-                convert_settings(value['children'], categories, parameters, category_name)
+                convert_settings(value['children'], categories, parameters, category_name, ancestors)
         else:
             param_name = key
             param = {
@@ -60,21 +169,68 @@ def convert_settings(settings_dict, categories, parameters, parent_category=None
                 "title": value.get('label', key),
                 "description": value.get('description', ""),
                 "category": parent_category,
-                "quantity": get_quantity(value)
             }
+            # Merge quantity attributes directly into param
+            param.update(get_param_attributes(value))
+
+            # Add ancestors
+            if ancestors:
+                param['ancestors'] = ancestors
+
+            # Map validation and relations
+            if 'value' in value:
+                param["defaultValue"] = _get_expression(param_name, value['value'])
+            elif 'default_value' in value:
+                 # Fallback if no specific 'value' expression is provided, ensuring we have a default
+                 # However, strict instructions say "value" key -> "default relation".
+                 # If we want a static default, we could use this, but for now sticking to instructions 
+                 # and user might want expressions mainly.
+                 # Let's add it if it is safe. Original instruction: 
+                 # 'for the default relation, use the "value" key from the definition'
+                 # I will ignore default_value for relation to be safe and strictly follow instruction.
+                 pass
+
+            if 'minimum_value' in value:
+                param["minThreshold"] = _get_expression(param_name, value['minimum_value'])
+            
+            if 'maximum_value' in value:
+                param["maxThreshold"] = _get_expression(param_name, value['maximum_value'])
+            
+            if 'enabled' in value:
+                param["enabledCondition"] = _get_expression(param_name, value['enabled'])
+            
+            # The schema should rely on ancestors list, so we don't need to output children anymore
+            # if 'children' in value:
+            #     # Add child relations for immediate children
+            #     child_relations = []
+            #     for child_key, child_val in value['children'].items():
+            #          if child_val.get('type') != 'category':
+            #              child_relations.append({
+            #                  "parent": param_name,
+            #                  "child": child_key
+            #              })
+            #     if child_relations:
+            #         param["children"] = child_relations
             
             parameters.append(param)
             
             # Recurse into children if they exist (Cura supports nested parameters)
             if 'children' in value:
-                convert_settings(value['children'], categories, parameters, parent_category)
+                # Pass current hierarchy down
+                new_ancestors = ancestors + [param_name]
+                convert_settings(value['children'], categories, parameters, parent_category, new_ancestors)
 
 def main():
     # Setup paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    default_output_path = os.path.join(script_dir, '..', 'schemas', 'v0.1a', 'schema.json')
+    
+    parser = argparse.ArgumentParser(description="Convert Cura definitions to LamiNode schema.")
+    parser.add_argument("output", nargs="?", help="Output path for schema.json", default=default_output_path)
+    args = parser.parse_args()
+
+    output_path = args.output
     input_path = os.path.join(script_dir, 'assets', 'fdmprinter.def.json')
-    # Target version v0.2
-    output_path = os.path.join(script_dir, '..', 'schemas', 'v0.2', 'schema.json')
     
     if not os.path.exists(input_path):
         print(f"Error: Input file not found at {input_path}")
@@ -92,11 +248,18 @@ def main():
     print("Converting settings...")
     convert_settings(settings, categories, parameters)
 
+    # Sort categories alphabetically by title
+    categories.sort(key=lambda c: c['title'])
+
+    # Assign rainbow colors
+    for i, category in enumerate(categories):
+        category['color'] = RAINBOW_COLORS[i % len(RAINBOW_COLORS)]
+
     # Construct the final schema object according to the new data structure
     schema = {
         "manifest": {
             "schemaType": "application",
-            "schemaVersion": "0.2",
+            "schemaVersion": "0.3",
             "schemaAuthors": ["The Laminode Team"],
             "lastUpdated": datetime.now().strftime("%Y-%m-%d"),
             "targetAppName": "Ultimaker Cura"
