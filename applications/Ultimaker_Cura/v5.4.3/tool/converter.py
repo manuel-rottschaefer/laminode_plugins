@@ -36,6 +36,27 @@ RAINBOW_COLORS = [
     "blue", "indigo", "deepPurple", "violet", "purple", "pink"
 ]
 
+def clean_html(text):
+    """Removes HTML tags from a string."""
+    if not isinstance(text, str):
+        return text
+    # Remove HTML tags like <html>, <br>, <i>, etc.
+    return re.sub(r'<[^>]+>', '', text)
+
+def collect_param_categories(settings_dict, current_category=None):
+    """Recursively collects parameter names and their categories."""
+    param_to_category = {}
+    for key, value in settings_dict.items():
+        if value.get('type') == 'category':
+            new_category = key
+            if 'children' in value:
+                param_to_category.update(collect_param_categories(value['children'], new_category))
+        else:
+            param_to_category[key] = current_category
+            if 'children' in value:
+                param_to_category.update(collect_param_categories(value['children'], current_category))
+    return param_to_category
+
 def get_param_attributes(cura_setting):
     """Determines the LamiNode parameter type to be merged into the parameter."""
     attributes = {}
@@ -148,7 +169,7 @@ def _get_expression(target_name, value):
         "expression": expr
     }
 
-def convert_settings(settings_dict, categories, parameters, parent_category=None, ancestors=None):
+def convert_settings(settings_dict, categories, parameters, param_to_category, parent_category=None, ancestors=None):
     """Recursively traverses Cura settings to extract categories and parameters."""
     if ancestors is None:
         ancestors = []
@@ -161,34 +182,47 @@ def convert_settings(settings_dict, categories, parameters, parent_category=None
                 "title": value.get('label', key),
             })
             if 'children' in value:
-                convert_settings(value['children'], categories, parameters, category_name, ancestors)
+                convert_settings(value['children'], categories, parameters, param_to_category, category_name, ancestors)
         else:
             param_name = key
             param = {
                 "name": param_name,
                 "title": value.get('label', key),
-                "description": value.get('description', ""),
+                "description": clean_html(value.get('description', "")),
                 "category": parent_category,
             }
             # Merge quantity attributes directly into param
-            param.update(get_param_attributes(value))
+            qty_attrs = get_param_attributes(value)
+            param.update(qty_attrs)
+            # Duplicate quantity attributes into a 'quantity' object for Schema Editor compatibility
+            param['quantity'] = qty_attrs
 
-            # Add ancestors
-            if ancestors:
-                param['ancestors'] = ancestors
+            # Detect conditional dependencies to add as ancestors
+            dependencies = set()
+            for attr in ['value', 'enabled', 'minimum_value', 'maximum_value']:
+                if attr in value and isinstance(value[attr], str):
+                    # Find words that are known parameter names
+                    found = re.findall(r'\b[a-z_][a-z0-9_]*\b', value[attr])
+                    for f in found:
+                        if f in param_to_category and f != param_name:
+                            # Only add as ancestor if it's in the same category
+                            if param_to_category[f] == parent_category:
+                                dependencies.add(f)
+            
+            # Combine structural ancestors with logical dependencies
+            current_ancestors = list(ancestors)
+            for dep in sorted(list(dependencies)):
+                if dep not in current_ancestors:
+                    current_ancestors.append(dep)
+
+            if current_ancestors:
+                param['ancestors'] = current_ancestors
 
             # Map validation and relations
             if 'value' in value:
                 param["defaultValue"] = _get_expression(param_name, value['value'])
             elif 'default_value' in value:
-                 # Fallback if no specific 'value' expression is provided, ensuring we have a default
-                 # However, strict instructions say "value" key -> "default relation".
-                 # If we want a static default, we could use this, but for now sticking to instructions 
-                 # and user might want expressions mainly.
-                 # Let's add it if it is safe. Original instruction: 
-                 # 'for the default relation, use the "value" key from the definition'
-                 # I will ignore default_value for relation to be safe and strictly follow instruction.
-                 pass
+                param["defaultValue"] = _get_expression(param_name, value['default_value'])
 
             if 'minimum_value' in value:
                 param["minThreshold"] = _get_expression(param_name, value['minimum_value'])
@@ -199,26 +233,13 @@ def convert_settings(settings_dict, categories, parameters, parent_category=None
             if 'enabled' in value:
                 param["enabledCondition"] = _get_expression(param_name, value['enabled'])
             
-            # The schema should rely on ancestors list, so we don't need to output children anymore
-            # if 'children' in value:
-            #     # Add child relations for immediate children
-            #     child_relations = []
-            #     for child_key, child_val in value['children'].items():
-            #          if child_val.get('type') != 'category':
-            #              child_relations.append({
-            #                  "parent": param_name,
-            #                  "child": child_key
-            #              })
-            #     if child_relations:
-            #         param["children"] = child_relations
-            
             parameters.append(param)
             
             # Recurse into children if they exist (Cura supports nested parameters)
             if 'children' in value:
                 # Pass current hierarchy down
                 new_ancestors = ancestors + [param_name]
-                convert_settings(value['children'], categories, parameters, parent_category, new_ancestors)
+                convert_settings(value['children'], categories, parameters, param_to_category, parent_category, new_ancestors)
 
 def main():
     # Setup paths
@@ -245,8 +266,11 @@ def main():
     categories = []
     parameters = []
 
+    print("Collecting parameter categories...")
+    param_to_category = collect_param_categories(settings)
+
     print("Converting settings...")
-    convert_settings(settings, categories, parameters)
+    convert_settings(settings, categories, parameters, param_to_category)
 
     # Sort categories alphabetically by title
     categories.sort(key=lambda c: c['title'])
@@ -257,6 +281,7 @@ def main():
 
     # Construct the final schema object according to the new data structure
     schema = {
+        "name": "Ultimaker Cura",
         "manifest": {
             "schemaType": "application",
             "schemaVersion": "0.3",
