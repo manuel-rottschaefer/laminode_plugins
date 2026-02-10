@@ -1,7 +1,7 @@
 {
     "pluginType": "application",
     "displayName": "Ultimaker Cura",
-    "description": "Supports the Ultimaker Cura slicing software aimed at FDM machines.",
+    "description": "Supports the Ultimaker Cura slicing software aimed at FDM machines. Import/export .curaprofile files with structural validation.",
     "application": {
         "appName": "Ultimaker Cura",
         "appVersion": "5.4.3",
@@ -18,6 +18,12 @@
         "fileTypes": {
             "profileImportBucket": "*.curaprofile, *.ini",
             "gcodeExportBucket": "*.curaprofile"
+        },
+        "adapterFeatures": {
+            "validateFile": true,
+            "importLayer": true,
+            "exportProfile": true,
+            "importProfile": false
         }
     },
     "schemas": [
