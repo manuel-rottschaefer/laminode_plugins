@@ -177,9 +177,17 @@ def convert_settings(settings_dict, categories, parameters, param_to_category, p
     for key, value in settings_dict.items():
         if value.get('type') == 'category':
             category_name = key
+            label = value.get('label', key)
+
+            # Category role is "buildJob" by default, with a list of exception names
+            role = 'machine' if [
+                'command_line_settings', 'experimental', 'machine_settings', 'meshfix', 'ppr', 'blackmagic', 
+            ] in label.lower() else 'buildJob'
+                
             categories.append({
                 "name": category_name,
-                "title": value.get('label', key),
+                "title": label,
+                "role": role,
             })
             if 'children' in value:
                 convert_settings(value['children'], categories, parameters, param_to_category, category_name, ancestors)
