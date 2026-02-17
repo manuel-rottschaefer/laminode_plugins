@@ -31,6 +31,11 @@
             "id": "v0.1a",
             "version": "0.1a",
             "releaseDate": "2026-02-02"
+        },
+        {
+            "id": "v0.2",
+            "version": "0.2",
+            "releaseDate": "2026-02-17"
         }
     ]
 }

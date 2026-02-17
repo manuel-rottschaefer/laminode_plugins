@@ -1,8 +1,9 @@
 import json
-import os
 import re
 import argparse
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Mapping of Cura units to LamiNode quantity structures
 UNIT_MAPPING = {
@@ -24,7 +25,7 @@ TYPE_MAPPING = {
     "float": "float",
     "bool": "boolean",
     "str": "string",
-    "enum": "option",
+    "enum": "choice",
 }
 
 DEFAULT_COLOR = "blue"
@@ -36,237 +37,257 @@ RAINBOW_COLORS = [
     "blue", "indigo", "deepPurple", "violet", "purple", "pink"
 ]
 
-def clean_html(text):
-    """Removes HTML tags from a string."""
+# Precompiled regexes for expression transpilation (performance and clarity)
+RESOLVE_SINGLE = re.compile(r"resolveOrValue\('([^']+)'\)")
+RESOLVE_DOUBLE = re.compile(r'resolveOrValue\("([^\"]+)"\)')
+EXTRUDER_VALUE_SINGLE = re.compile(r"extruderValue\([^,]+,\s*'([^']+)'\)")
+EXTRUDER_VALUE_DOUBLE = re.compile(r'extruderValue\([^,]+,\s*"([^\"]+)"\)')
+EXTRUDER_VALUES_SINGLE = re.compile(r"extruderValues\('([^']+)'\)")
+EXTRUDER_VALUES_DOUBLE = re.compile(r'extruderValues\("([^\"]+)"\)')
+LEN_PATTERN = re.compile(r"\blen\(([^)]+)\)")
+SUM_PATTERN = re.compile(r"\bsum\(([^)]+)\)")
+ANY_PATTERN = re.compile(r"\bany\(([^)]+)\)")
+MAX_PATTERN = re.compile(r"\bmax\(([^)]+)\)")
+MIN_PATTERN = re.compile(r"\bmin\(([^)]+)\)")
+TERNARY_PATTERN = re.compile(r"(.+?)\s+if\s+(.+?)\s+else\s+(.+)")
+
+# Script metadata and runtime flags
+VERSION = "0.1"
+QUIET: bool = False
+
+
+def log(msg: str) -> None:
+    """Print helper honoring the `QUIET` flag."""
+    if not QUIET:
+        print(msg)
+
+def clean_html(text: Any) -> Any:
+    """Remove HTML tags from `text` when it's a string.
+
+    Non-string values are returned unchanged.
+    """
     if not isinstance(text, str):
         return text
-    # Remove HTML tags like <html>, <br>, <i>, etc.
-    return re.sub(r'<[^>]+>', '', text)
+    return re.sub(r"<[^>]+>", "", text)
 
-def collect_param_categories(settings_dict, current_category=None):
-    """Recursively collects parameter names and their categories."""
-    param_to_category = {}
+def collect_param_categories(settings_dict: Dict[str, Any], current_category: Optional[str] = None) -> Dict[str, Optional[str]]:
+    """Recursively collect a mapping of parameter -> containing category.
+
+    `settings_dict` is a nested dict of Cura settings.
+    """
+    param_to_category: Dict[str, Optional[str]] = {}
     for key, value in settings_dict.items():
-        if value.get('type') == 'category':
+        if value.get("type") == "category":
             new_category = key
-            if 'children' in value:
-                param_to_category.update(collect_param_categories(value['children'], new_category))
+            if "children" in value:
+                param_to_category.update(collect_param_categories(value["children"], new_category))
         else:
             param_to_category[key] = current_category
-            if 'children' in value:
-                param_to_category.update(collect_param_categories(value['children'], current_category))
+            if "children" in value:
+                param_to_category.update(collect_param_categories(value["children"], current_category))
     return param_to_category
 
-def get_param_attributes(cura_setting):
-    """Determines the LamiNode parameter type to be merged into the parameter."""
-    attributes = {}
-    
-    # 1. Determine Type (semantic quantity name or generic type)
-    cura_type = cura_setting.get('type')
-    unit = cura_setting.get('unit')
-    
-    if unit in UNIT_MAPPING:
-        attributes['type'] = UNIT_MAPPING[unit]['name']
-    elif cura_type == 'bool':
-        attributes['type'] = 'boolean'
-    elif cura_type == 'enum' or cura_type == 'str':
-        attributes['type'] = 'choice'
-    elif cura_type == 'int':
-        attributes['type'] = 'integer'
-    elif cura_type == 'float':
-        attributes['type'] = 'float'
-    else:
-        attributes['type'] = 'numeric' # Default fallback
+def get_param_attributes(cura_setting: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a dict of quantity/type attributes for a Cura setting.
 
-    # 2. Extract Options for enums
-    if cura_type == 'enum' and 'options' in cura_setting:
-         options = cura_setting['options']
-         if isinstance(options, dict):
-             attributes['options'] = list(options.keys())
-         elif isinstance(options, list):
-             attributes['options'] = options
+    The function preserves previous behavior but is annotated for clarity.
+    """
+    attributes: Dict[str, Any] = {}
+    cura_type = cura_setting.get("type")
+    unit = cura_setting.get("unit")
+
+    if unit in UNIT_MAPPING:
+        attributes["type"] = UNIT_MAPPING[unit]["name"]
+    elif cura_type == "bool":
+        attributes["type"] = "boolean"
+    elif cura_type == "enum" or (cura_type == "str" and "options" in cura_setting):
+        attributes["type"] = "choice"
+    elif cura_type == "str":
+        attributes["type"] = "string"
+    elif cura_type == "int":
+        attributes["type"] = "integer"
+    elif cura_type == "float":
+        attributes["type"] = "float"
+    else:
+        attributes["type"] = "numeric"
+
+    if cura_type == "enum" and "options" in cura_setting:
+        options = cura_setting["options"]
+        if isinstance(options, dict):
+            attributes["options"] = list(options.keys())
+        elif isinstance(options, list):
+            attributes["options"] = options
 
     return attributes
 
-def _transpile_expression(expr):
-    """Transpiles Python expression to JavaScript."""
+def _transpile_expression(expr: Any) -> str:
+    """Transpile a Cura/Python expression into a JavaScript-like expression string.
+
+    This is a heuristic transliteration (keeps original behavior).
+    """
     if not isinstance(expr, str):
         return str(expr).lower() if isinstance(expr, bool) else str(expr)
     
-    # Remove unsupported functions
-    # resolveOrValue('setting') -> setting
-    expr = re.sub(r"resolveOrValue\('([^']+)'\)", r"\1", expr)
-    expr = re.sub(r'resolveOrValue\("([^"]+)"\)', r"\1", expr)
-    
-    # extruderValue(nr, 'setting') -> setting
-    expr = re.sub(r"extruderValue\([^,]+,\s*'([^']+)'\)", r"\1", expr)
-    expr = re.sub(r'extruderValue\([^,]+,\s*"([^"]+)"\)', r"\1", expr)
-    
+    # Remove unsupported functions using precompiled patterns
+    expr = RESOLVE_SINGLE.sub(r"\1", expr)
+    expr = RESOLVE_DOUBLE.sub(r"\1", expr)
+
+    expr = EXTRUDER_VALUE_SINGLE.sub(r"\1", expr)
+    expr = EXTRUDER_VALUE_DOUBLE.sub(r"\1", expr)
+
     # Replace math module
     expr = expr.replace("math.", "Math.")
 
-    # 1. Transform function calls
-    # extruderValues('setting') -> [setting] (Simulate list for single extruder)
-    expr = re.sub(r"extruderValues\('([^']+)'\)", r"[\1]", expr)
-    expr = re.sub(r'extruderValues\("([^"]+)"\)', r"[\1]", expr)
-    
+    # Transform extruderValues -> array for single extruder
+    expr = EXTRUDER_VALUES_SINGLE.sub(r"[\1]", expr)
+    expr = EXTRUDER_VALUES_DOUBLE.sub(r"[\1]", expr)
+
     # len(x) -> (x).length
-    # Note: Regex tries to match balanced parens simply
-    expr = re.sub(r"\blen\(([^)]+)\)", r"(\1).length", expr)
+    expr = LEN_PATTERN.sub(r"(\1).length", expr)
 
     # sum(x) -> (x).reduce((a, b) => a + b, 0)
-    # This assumes x is an array (like from extruderValues or manual list)
-    expr = re.sub(r"\bsum\(([^)]+)\)", r"(\1).reduce((a, b) => a + b, 0)", expr)
-    
-    # an(x) -> (x).some(e => e)
-    expr = re.sub(r"\bany\(([^)]+)\)", r"(\1).some(e => e)", expr)
+    expr = SUM_PATTERN.sub(r"(\1).reduce((a, b) => a + b, 0)", expr)
 
-    # max(iterable) -> Math.max(...iterable)
-    # max(a, b) -> Math.max(a, b) 
-    # Use simple heuristic: if comma in args, assume distinct args, else spread
-    def replace_max(match):
+    # any(x) -> (x).some(e => e)
+    expr = ANY_PATTERN.sub(r"(\1).some(e => e)", expr)
+
+    # max/min handling (heuristic as before)
+    def replace_max(match: re.Match) -> str:
         args = match.group(1)
         if "," in args:
             return f"Math.max({args})"
         return f"Math.max(...{args})"
-    expr = re.sub(r"\bmax\(([^)]+)\)", replace_max, expr)
+    expr = MAX_PATTERN.sub(replace_max, expr)
 
-    # min(iterable) -> Math.min(...iterable)
-    # min(a, b) -> Math.min(a, b)
-    def replace_min(match):
+    def replace_min(match: re.Match) -> str:
         args = match.group(1)
         if "," in args:
             return f"Math.min({args})"
         return f"Math.min(...{args})"
-    expr = re.sub(r"\bmin\(([^)]+)\)", replace_min, expr)
+    expr = MIN_PATTERN.sub(replace_min, expr)
 
-    # Replace Python operators
-    # Note: simple replacement, might need more robust parsing for complex cases
+    # Replace Python boolean operators and constants
     expr = expr.replace(" and ", " && ")
     expr = expr.replace(" or ", " || ")
     expr = expr.replace(" not ", " ! ")
-    
-    # Replace Python constants
     expr = expr.replace("True", "true")
     expr = expr.replace("False", "false")
     expr = expr.replace("None", "null")
 
     # Handle ternary: "A if B else C" -> "B ? A : C"
-    # This is a basic regex and won't handle nested ternaries correctly without a parser
-    ternary_pattern = re.compile(r"(.+?)\s+if\s+(.+?)\s+else\s+(.+)")
-    match = ternary_pattern.search(expr)
+    match = TERNARY_PATTERN.search(expr)
     if match:
         expr = f"{match.group(2)} ? {match.group(1)} : {match.group(3)}"
         
     return expr
 
-def _get_expression(target_name, value):
-    """Formats an expression object for the schema."""
+def _get_expression(target_name: str, value: Any) -> Dict[str, Any]:
+    """Return a schema expression object mapping `target` to transpiled expression."""
     expr = _transpile_expression(value)
-    
-    return {
-        "target": target_name,
-        "expression": expr
-    }
+    return {"target": target_name, "expression": expr}
 
-def convert_settings(settings_dict, categories, parameters, param_to_category, parent_category=None, ancestors=None):
-    """Recursively traverses Cura settings to extract categories and parameters."""
+def convert_settings(
+    settings_dict: Dict[str, Any],
+    categories: List[Dict[str, Any]],
+    parameters: List[Dict[str, Any]],
+    param_to_category: Dict[str, Optional[str]],
+    parent_category: Optional[str] = None,
+    ancestors: Optional[List[str]] = None,
+) -> None:
+    """Traverse Cura settings recursively to fill `categories` and `parameters`.
+
+    This function mutates the `categories` and `parameters` lists passed in.
+    """
     if ancestors is None:
         ancestors = []
-        
-    for key, value in settings_dict.items():
-        if value.get('type') == 'category':
-            category_name = key
-            label = value.get('label', key)
 
-            # Category role is "buildJob" by default, with a list of exception names
-            role = 'machine' if [
-                'command_line_settings', 'experimental', 'machine_settings', 'meshfix', 'ppr', 'blackmagic', 
-            ] in label.lower() else 'buildJob'
-                
-            categories.append({
-                "name": category_name,
-                "title": label,
-                "role": role,
-            })
-            if 'children' in value:
-                convert_settings(value['children'], categories, parameters, param_to_category, category_name, ancestors)
+    for key, value in settings_dict.items():
+        if value.get("type") == "category":
+            category_name = key
+            label = value.get("label", key)
+
+            # Category role is "buildJob" by default. If the label contains any
+            # of these keywords, mark it as a "machine" category.
+            _machine_keywords = [
+                "command_line_settings",
+                "experimental",
+                "machine_settings",
+                "meshfix",
+                "ppr",
+                "blackmagic",
+            ]
+            role = "machine" if any(k in label.lower() for k in _machine_keywords) else "buildJob"
+
+            categories.append({"name": category_name, "title": label, "role": role})
+            if "children" in value:
+                convert_settings(value["children"], categories, parameters, param_to_category, category_name, ancestors)
         else:
             param_name = key
-            param = {
+            param: Dict[str, Any] = {
                 "name": param_name,
-                "title": value.get('label', key),
-                "description": clean_html(value.get('description', "")),
+                "title": value.get("label", key),
+                "description": clean_html(value.get("description", "")),
                 "category": parent_category,
             }
-            # Merge quantity attributes directly into param
-            qty_attrs = get_param_attributes(value)
-            param.update(qty_attrs)
-            # Duplicate quantity attributes into a 'quantity' object for Schema Editor compatibility
-            param['quantity'] = qty_attrs
 
-            # Detect conditional dependencies to add as ancestors
-            dependencies = set()
-            for attr in ['value', 'enabled', 'minimum_value', 'maximum_value']:
-                if attr in value and isinstance(value[attr], str):
-                    # Find words that are known parameter names
-                    found = re.findall(r'\b[a-z_][a-z0-9_]*\b', value[attr])
-                    for f in found:
-                        if f in param_to_category and f != param_name:
-                            # Only add as ancestor if it's in the same category
-                            if param_to_category[f] == parent_category:
-                                dependencies.add(f)
-            
-            # Combine structural ancestors with logical dependencies
-            current_ancestors = list(ancestors)
-            for dep in sorted(list(dependencies)):
-                if dep not in current_ancestors:
-                    current_ancestors.append(dep)
+            # Strict contract: Every parameter MUST have a 'quantity' object
+            param["quantity"] = get_param_attributes(value)
 
-            if current_ancestors:
-                param['ancestors'] = current_ancestors
+            if ancestors:
+                param["ancestors"] = ancestors
 
             # Map validation and relations
-            if 'value' in value:
-                param["defaultValue"] = _get_expression(param_name, value['value'])
-            elif 'default_value' in value:
-                param["defaultValue"] = _get_expression(param_name, value['default_value'])
+            if "value" in value:
+                param["defaultValue"] = _get_expression(param_name, value["value"])
+            elif "default_value" in value:
+                param["defaultValue"] = _get_expression(param_name, value["default_value"])
 
-            if 'minimum_value' in value:
-                param["minThreshold"] = _get_expression(param_name, value['minimum_value'])
-            
-            if 'maximum_value' in value:
-                param["maxThreshold"] = _get_expression(param_name, value['maximum_value'])
-            
-            if 'enabled' in value:
-                param["enabledCondition"] = _get_expression(param_name, value['enabled'])
-            
+            if "minimum_value" in value:
+                param["minThreshold"] = _get_expression(param_name, value["minimum_value"])
+
+            if "maximum_value" in value:
+                param["maxThreshold"] = _get_expression(param_name, value["maximum_value"])
+
+            if "enabled" in value:
+                param["enabledCondition"] = _get_expression(param_name, value["enabled"])
+
             parameters.append(param)
-            
-            # Recurse into children if they exist (Cura supports nested parameters)
-            if 'children' in value:
-                # Pass current hierarchy down
+
+            if "children" in value:
                 new_ancestors = ancestors + [param_name]
-                convert_settings(value['children'], categories, parameters, param_to_category, parent_category, new_ancestors)
+                convert_settings(value["children"], categories, parameters, param_to_category, parent_category, new_ancestors)
 
 def main():
     # Setup paths
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    default_output_path = os.path.join(script_dir, '..', 'schemas', 'v0.1a', 'schema.json')
-    
+    script_dir = Path(__file__).resolve().parent
+    input_path = script_dir / "assets" / "fdmprinter.def.json"
+
+    # Default output placed in same directory as input file
+    default_output_path = input_path.parent / "generated_schema.json"
+
     parser = argparse.ArgumentParser(description="Convert Cura definitions to LamiNode schema.")
-    parser.add_argument("output", nargs="?", help="Output path for schema.json", default=default_output_path)
+    parser.add_argument("output", nargs="?", help="Optional positional output path (file name or full path)")
+    parser.add_argument("-o", "--output", dest="opt_output", help="Output path for generated schema (overrides positional)")
+    parser.add_argument("--version", action="store_true", dest="show_version", help="Show script version and exit")
+    parser.add_argument("--quiet", action="store_true", dest="quiet", help="Minimize output")
     args = parser.parse_args()
 
-    output_path = args.output
-    input_path = os.path.join(script_dir, 'assets', 'fdmprinter.def.json')
+    if args.show_version:
+        print(VERSION)
+        return
+
+    global QUIET
+    QUIET = bool(args.quiet)
+
+    # Preference: -o/--output over positional `output`; fallback to default
+    output_path = Path(args.opt_output or args.output or str(default_output_path))
     
-    if not os.path.exists(input_path):
+    if not input_path.exists():
         print(f"Error: Input file not found at {input_path}")
         return
 
-    print(f"Loading {input_path}...")
-    with open(input_path, 'r', encoding='utf-8') as f:
+    log(f"Loading {input_path}...")
+    with input_path.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
     settings = data.get('settings', {})
@@ -274,10 +295,10 @@ def main():
     categories = []
     parameters = []
 
-    print("Collecting parameter categories...")
+    log("Collecting parameter categories...")
     param_to_category = collect_param_categories(settings)
 
-    print("Converting settings...")
+    log("Converting settings...")
     convert_settings(settings, categories, parameters, param_to_category)
 
     # Sort categories alphabetically by title
@@ -302,13 +323,13 @@ def main():
     }
 
     # Ensure output directory exists and write the file
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8") as f:
         json.dump(schema, f, indent=4, ensure_ascii=False)
 
-    print(f"Successfully generated {output_path}")
-    print(f" - Categories: {len(categories)}")
-    print(f" - Parameters: {len(parameters)}")
+    log(f"Successfully generated {output_path}")
+    log(f" - Categories: {len(categories)}")
+    log(f" - Parameters: {len(parameters)}")
 
 if __name__ == "__main__":
     main()
