@@ -113,10 +113,13 @@ def get_param_attributes(cura_setting: Dict[str, Any]) -> Dict[str, Any]:
 
     if cura_type == "enum" and "options" in cura_setting:
         options = cura_setting["options"]
+        # Preserve the original mapping of identifier -> display title when available.
+        # Fall back to converting lists into id->title maps where id == title.
         if isinstance(options, dict):
-            attributes["options"] = list(options.keys())
+            # Ensure keys and values are strings
+            attributes["options"] = {str(k): (v if isinstance(v, str) else str(v)) for k, v in options.items()}
         elif isinstance(options, list):
-            attributes["options"] = options
+            attributes["options"] = {str(e): str(e) for e in options}
 
     return attributes
 

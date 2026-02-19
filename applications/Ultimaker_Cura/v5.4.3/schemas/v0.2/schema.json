@@ -6,7 +6,7 @@
         "schemaAuthors": [
             "The Laminode Team"
         ],
-        "lastUpdated": "2026-02-17",
+        "lastUpdated": "2026-02-19",
         "targetAppName": "Ultimaker Cura"
     },
     "categories": [
@@ -381,10 +381,10 @@
             "category": "machine_settings",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "rectangular",
-                    "elliptic"
-                ]
+                "options": {
+                    "rectangular": "Rectangular",
+                    "elliptic": "Elliptic"
+                }
             },
             "defaultValue": {
                 "target": "machine_shape",
@@ -398,10 +398,10 @@
             "category": "machine_settings",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "glass",
-                    "aluminum"
-                ]
+                "options": {
+                    "glass": "Glass",
+                    "aluminum": "Aluminum"
+                }
             },
             "defaultValue": {
                 "target": "machine_buildplate_type",
@@ -620,19 +620,19 @@
             "category": "machine_settings",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "RepRap (Marlin/Sprinter)",
-                    "RepRap (Volumetric)",
-                    "RepRap (RepRap)",
-                    "UltiGCode",
-                    "Griffin",
-                    "Cheetah",
-                    "Makerbot",
-                    "BFB",
-                    "MACH3",
-                    "Repetier",
-                    "BambuLab"
-                ]
+                "options": {
+                    "RepRap (Marlin/Sprinter)": "Marlin",
+                    "RepRap (Volumetric)": "Marlin (Volumetric)",
+                    "RepRap (RepRap)": "RepRap",
+                    "UltiGCode": "Ultimaker 2",
+                    "Griffin": "Griffin",
+                    "Cheetah": "Griffin+Cheetah",
+                    "Makerbot": "Makerbot",
+                    "BFB": "Bits from Bytes",
+                    "MACH3": "Mach3",
+                    "Repetier": "Repetier",
+                    "BambuLab": "BambuLab"
+                }
             },
             "defaultValue": {
                 "target": "machine_gcode_flavor",
@@ -1770,10 +1770,10 @@
             "category": "shell",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "inside_out",
-                    "outside_in"
-                ]
+                "options": {
+                    "inside_out": "Inside To Outside",
+                    "outside_in": "Outside To Inside"
+                }
             },
             "defaultValue": {
                 "target": "inset_direction",
@@ -1964,12 +1964,12 @@
             "category": "shell",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "back",
-                    "shortest",
-                    "random",
-                    "sharpest_corner"
-                ]
+                "options": {
+                    "back": "User Specified",
+                    "shortest": "Shortest",
+                    "random": "Random",
+                    "sharpest_corner": "Sharpest Corner"
+                }
             },
             "defaultValue": {
                 "target": "z_seam_type",
@@ -2000,16 +2000,16 @@
             "category": "shell",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "backleft",
-                    "back",
-                    "backright",
-                    "right",
-                    "frontright",
-                    "front",
-                    "frontleft",
-                    "left"
-                ]
+                "options": {
+                    "backleft": "Back Left",
+                    "back": "Back",
+                    "backright": "Back Right",
+                    "right": "Right",
+                    "frontright": "Front Right",
+                    "front": "Front",
+                    "frontleft": "Front Left",
+                    "left": "Left"
+                }
             },
             "defaultValue": {
                 "target": "z_seam_position",
@@ -2067,12 +2067,12 @@
             "category": "shell",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "z_seam_corner_inner",
-                    "z_seam_corner_outer",
-                    "z_seam_corner_any",
-                    "z_seam_corner_weighted"
-                ]
+                "options": {
+                    "z_seam_corner_inner": "Hide Seam",
+                    "z_seam_corner_outer": "Expose Seam",
+                    "z_seam_corner_any": "Hide or Expose Seam",
+                    "z_seam_corner_weighted": "Smart Hiding"
+                }
             },
             "defaultValue": {
                 "target": "z_seam_corner",
@@ -2173,11 +2173,11 @@
             "category": "top_bottom",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "ancestors": [
                 "roofing_layer_count"
@@ -2328,11 +2328,11 @@
             "category": "top_bottom",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "ancestors": [
                 "flooring_layer_count"
@@ -2554,11 +2554,11 @@
             "category": "top_bottom",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "defaultValue": {
                 "target": "top_bottom_pattern",
@@ -2576,11 +2576,11 @@
             "category": "top_bottom",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "defaultValue": {
                 "target": "top_bottom_pattern_0",
@@ -2759,10 +2759,10 @@
             "category": "top_bottom",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "defaultValue": {
                 "target": "ironing_pattern",
@@ -3201,22 +3201,22 @@
             "category": "infill",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "grid",
-                    "lines",
-                    "triangles",
-                    "trihexagon",
-                    "cubic",
-                    "cubicsubdiv",
-                    "tetrahedral",
-                    "quarter_cubic",
-                    "concentric",
-                    "zigzag",
-                    "cross",
-                    "cross_3d",
-                    "gyroid",
-                    "lightning"
-                ]
+                "options": {
+                    "grid": "Grid",
+                    "lines": "Lines",
+                    "triangles": "Triangles",
+                    "trihexagon": "Tri-Hexagon",
+                    "cubic": "Cubic",
+                    "cubicsubdiv": "Cubic Subdivision",
+                    "tetrahedral": "Octet",
+                    "quarter_cubic": "Quarter Cubic",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag",
+                    "cross": "Cross",
+                    "cross_3d": "Cross 3D",
+                    "gyroid": "Gyroid",
+                    "lightning": "Lightning"
+                }
             },
             "defaultValue": {
                 "target": "infill_pattern",
@@ -7292,13 +7292,13 @@
             "category": "travel",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "off",
-                    "all",
-                    "no_outer_surfaces",
-                    "noskin",
-                    "infill"
-                ]
+                "options": {
+                    "off": "Off",
+                    "all": "All",
+                    "no_outer_surfaces": "Not on Outer Surface",
+                    "noskin": "Not in Skin",
+                    "infill": "Within Infill"
+                }
             },
             "defaultValue": {
                 "target": "retraction_combing",
@@ -7889,11 +7889,11 @@
             "category": "cooling",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "unchanged",
-                    "only_last_extruder",
-                    "all_fans"
-                ]
+                "options": {
+                    "unchanged": "Unchanged",
+                    "only_last_extruder": "Only last extruder",
+                    "all_fans": "All fans"
+                }
             },
             "defaultValue": {
                 "target": "cool_during_extruder_switch",
@@ -8039,10 +8039,10 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "normal",
-                    "tree"
-                ]
+                "options": {
+                    "normal": "Normal",
+                    "tree": "Tree"
+                }
             },
             "defaultValue": {
                 "target": "support_structure",
@@ -8193,10 +8193,10 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "buildplate",
-                    "everywhere"
-                ]
+                "options": {
+                    "buildplate": "Touching Buildplate",
+                    "everywhere": "Everywhere"
+                }
             },
             "defaultValue": {
                 "target": "support_type",
@@ -8386,10 +8386,10 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "buildplate",
-                    "graceful"
-                ]
+                "options": {
+                    "buildplate": "On buildplate when possible",
+                    "graceful": "On model if required"
+                }
             },
             "defaultValue": {
                 "target": "support_tree_rest_preference",
@@ -8432,15 +8432,15 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "grid",
-                    "triangles",
-                    "concentric",
-                    "zigzag",
-                    "cross",
-                    "gyroid"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "grid": "Grid",
+                    "triangles": "Triangles",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag",
+                    "cross": "Cross",
+                    "gyroid": "Gyroid"
+                }
             },
             "defaultValue": {
                 "target": "support_pattern",
@@ -8857,10 +8857,10 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "xy_overrides_z",
-                    "z_overrides_xy"
-                ]
+                "options": {
+                    "xy_overrides_z": "X/Y overrides Z",
+                    "z_overrides_xy": "Z overrides X/Y"
+                }
             },
             "defaultValue": {
                 "target": "support_xy_overrides_z",
@@ -9345,13 +9345,13 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "grid",
-                    "triangles",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "grid": "Grid",
+                    "triangles": "Triangles",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "defaultValue": {
                 "target": "support_interface_pattern",
@@ -9369,13 +9369,13 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "grid",
-                    "triangles",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "grid": "Grid",
+                    "triangles": "Triangles",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "ancestors": [
                 "support_interface_pattern"
@@ -9396,13 +9396,13 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "lines",
-                    "grid",
-                    "triangles",
-                    "concentric",
-                    "zigzag"
-                ]
+                "options": {
+                    "lines": "Lines",
+                    "grid": "Grid",
+                    "triangles": "Triangles",
+                    "concentric": "Concentric",
+                    "zigzag": "Zig Zag"
+                }
             },
             "ancestors": [
                 "support_interface_pattern"
@@ -9561,13 +9561,13 @@
             "category": "support",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "support_area_overwrite_interface_area",
-                    "interface_area_overwrite_support_area",
-                    "support_lines_overwrite_interface_area",
-                    "interface_lines_overwrite_support_area",
-                    "nothing"
-                ]
+                "options": {
+                    "support_area_overwrite_interface_area": "Support preferred",
+                    "interface_area_overwrite_support_area": "Interface preferred",
+                    "support_lines_overwrite_interface_area": "Support lines preferred",
+                    "interface_lines_overwrite_support_area": "Interface lines preferred",
+                    "nothing": "Both overlap"
+                }
             },
             "defaultValue": {
                 "target": "support_interface_priority",
@@ -9857,12 +9857,12 @@
             "category": "platform_adhesion",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "skirt",
-                    "brim",
-                    "raft",
-                    "none"
-                ]
+                "options": {
+                    "skirt": "Skirt",
+                    "brim": "Brim",
+                    "raft": "Raft",
+                    "none": "None"
+                }
             },
             "defaultValue": {
                 "target": "adhesion_type",
@@ -10148,11 +10148,11 @@
             "category": "platform_adhesion",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "outside",
-                    "inside",
-                    "everywhere"
-                ]
+                "options": {
+                    "outside": "Outside Only",
+                    "inside": "Inside Only",
+                    "everywhere": "Everywhere"
+                }
             },
             "defaultValue": {
                 "target": "brim_location",
@@ -11530,10 +11530,10 @@
             "category": "dual",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "normal",
-                    "interleaved"
-                ]
+                "options": {
+                    "normal": "Normal",
+                    "interleaved": "Interleaved"
+                }
             },
             "defaultValue": {
                 "target": "prime_tower_mode",
@@ -12457,10 +12457,10 @@
             "category": "blackmagic",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "all_at_once",
-                    "one_at_a_time"
-                ]
+                "options": {
+                    "all_at_once": "All at Once",
+                    "one_at_a_time": "One at a Time"
+                }
             },
             "defaultValue": {
                 "target": "print_sequence",
@@ -12636,11 +12636,11 @@
             "category": "blackmagic",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "normal",
-                    "surface",
-                    "both"
-                ]
+                "options": {
+                    "normal": "Normal",
+                    "surface": "Surface",
+                    "both": "Both"
+                }
             },
             "defaultValue": {
                 "target": "magic_mesh_surface_mode",
@@ -12697,11 +12697,11 @@
             "category": "experimental",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "middle",
-                    "exclusive",
-                    "inclusive"
-                ]
+                "options": {
+                    "middle": "Middle",
+                    "exclusive": "Exclusive",
+                    "inclusive": "Inclusive"
+                }
             },
             "defaultValue": {
                 "target": "slicing_tolerance",
@@ -12862,10 +12862,10 @@
             "category": "experimental",
             "quantity": {
                 "type": "choice",
-                "options": [
-                    "full",
-                    "limited"
-                ]
+                "options": {
+                    "full": "Full",
+                    "limited": "Limited"
+                }
             },
             "defaultValue": {
                 "target": "draft_shield_height_limitation",
