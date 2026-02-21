@@ -1,0 +1,96 @@
+{
+    "length": {
+        "id": "length",
+        "type": "numeric",
+        "unit": "millimeter",
+        "symbol": "mm",
+        "title": "Length"
+    },
+    "speed": {
+        "id": "speed",
+        "type": "numeric",
+        "unit": "millimeter/second",
+        "symbol": "mm/s",
+        "title": "Speed"
+    },
+    "acceleration": {
+        "id": "acceleration",
+        "type": "numeric",
+        "unit": "millimeter/second^2",
+        "symbol": "mm/s²",
+        "title": "Acceleration"
+    },
+    "jerk": {
+        "id": "jerk",
+        "type": "numeric",
+        "unit": "millimeter/second^3",
+        "symbol": "mm/s³",
+        "title": "Jerk"
+    },
+    "temperature": {
+        "id": "temperature",
+        "type": "numeric",
+        "unit": "celsius",
+        "symbol": "°C",
+        "title": "Temperature"
+    },
+    "volumetric_flow": {
+        "id": "volumetric_flow",
+        "type": "numeric",
+        "unit": "cubic millimeter/second",
+        "symbol": "mm³/s",
+        "title": "Volumetric Flow"
+    },
+    "boolean": {
+        "id": "boolean",
+        "type": "boolean",
+        "title": "Boolean"
+    },
+    "choice": {
+        "id": "choice",
+        "type": "choice",
+        "title": "Choice"
+    },
+    "string": {
+        "id": "string",
+        "type": "string",
+        "title": "String"
+    },
+    "percentage": {
+        "id": "percentage",
+        "type": "percentage",
+        "symbol": "%",
+        "meta": {
+            "requiresReference": true
+        },
+        "title": "Percentage"
+    },
+    "relative": {
+        "id": "relative",
+        "type": "relative",
+        "symbol": "x",
+        "meta": {
+            "requiresReference": true
+        },
+        "title": "Relative"
+    },
+    "time": {
+        "id": "time",
+        "type": "numeric",
+        "unit": "second",
+        "symbol": "s",
+        "title": "Time"
+    },
+    "count": {
+        "id": "count",
+        "type": "numeric",
+        "title": "Count"
+    },
+    "angle": {
+        "id": "angle",
+        "type": "numeric",
+        "unit": "degree",
+        "symbol": "°",
+        "title": "Angle"
+    }
+}

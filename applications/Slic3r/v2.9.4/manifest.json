@@ -1,16 +1,16 @@
 {
     "pluginType": "application",
-    "displayName": "Ultimaker Cura",
-    "description": "Supports the Ultimaker Cura slicing software aimed at FDM machines.",
+    "displayName": "Slic3r",
+    "description": "Supports all derivates of Slic3r such as PrusaSlicer, SuperSlicer, Bambu Studio and OrcaSlicer.",
     "application": {
-        "appName": "Ultimaker Cura",
-        "appVersion": "5.4.3",
-        "vendor": "Ultimaker",
-        "website": "https://ultimaker.com/software/ultimaker-cura",
+        "appName": "Slic3r",
+        "appVersion": "2.9.4",
+        "vendor": "Slic3r",
+        "website": "https://slic3r.org/",
         "sector": "FDM"
     },
     "plugin": {
-        "pluginID": "ultimaker_cura_5.4.3",
+        "pluginID": "slic3r_2.9.4",
         "pluginVersion": "1.0",
         "pluginAuthor": "The Laminode Team",
         "publishedDate": "2026-02-02",
@@ -30,7 +30,7 @@
         {
             "id": "v0.1a",
             "version": "0.1a",
-            "releaseDate": "2026-02-22"
+            "releaseDate": "2026-02-02"
         }
     ]
 }

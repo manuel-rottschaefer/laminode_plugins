@@ -1,0 +1,25 @@
+{
+    "default": "blue",
+    "rainbow": [
+        "red",
+        "crimson",
+        "deepOrange",
+        "orange",
+        "amber",
+        "gold",
+        "yellow",
+        "lime",
+        "lightGreen",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "lightBlue",
+        "blue",
+        "indigo",
+        "deepPurple",
+        "violet",
+        "purple",
+        "pink"
+    ]
+}

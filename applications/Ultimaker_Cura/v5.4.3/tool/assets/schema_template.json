@@ -1,0 +1,11 @@
+{
+    "name": "Ultimaker Cura",
+    "manifest": {
+        "schemaType": "application",
+        "schemaVersion": "0.3",
+        "schemaAuthors": [
+            "The Laminode Team"
+        ],
+        "targetAppName": "Ultimaker Cura"
+    }
+}

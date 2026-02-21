@@ -1,0 +1,61 @@
+{
+    "unit_mapping": {
+        "mm": {
+            "name": "length",
+            "unit": "millimeter",
+            "symbol": "mm"
+        },
+        "mm/s": {
+            "name": "speed",
+            "unit": "millimeter/second",
+            "symbol": "mm/s"
+        },
+        "°C": {
+            "name": "temperature",
+            "unit": "celsius",
+            "symbol": "°C"
+        },
+        "%": {
+            "name": "percentage",
+            "unit": "percent",
+            "symbol": "%"
+        },
+        "s": {
+            "name": "time",
+            "unit": "second",
+            "symbol": "s"
+        },
+        "mm²": {
+            "name": "area",
+            "unit": "square millimeter",
+            "symbol": "mm²"
+        },
+        "mm/s²": {
+            "name": "acceleration",
+            "unit": "millimeter/second²",
+            "symbol": "mm/s²"
+        },
+        "°": {
+            "name": "angle",
+            "unit": "degree",
+            "symbol": "°"
+        },
+        "mm³": {
+            "name": "volume",
+            "unit": "cubic millimeter",
+            "symbol": "mm³"
+        },
+        "mm/s³": {
+            "name": "jerk",
+            "unit": "millimeter/second³",
+            "symbol": "mm/s³"
+        }
+    },
+    "type_mapping": {
+        "int": "integer",
+        "float": "float",
+        "bool": "boolean",
+        "str": "string",
+        "enum": "choice"
+    }
+}

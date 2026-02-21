@@ -1,0 +1,36 @@
+{
+    "pluginType": "application",
+    "displayName": "OrcaSlicer",
+    "description": "Powerful slicer based on BambuStudio with advanced calibration and quality optimizations.",
+    "application": {
+        "appName": "OrcaSlicer",
+        "appVersion": "2.3.1",
+        "vendor": "SoftFever",
+        "website": "https://github.com/SoftFever/OrcaSlicer",
+        "sector": "FDM"
+    },
+    "plugin": {
+        "pluginID": "orcaslicer_2.3.1",
+        "pluginVersion": "1.0",
+        "pluginAuthor": "The Laminode Team",
+        "publishedDate": "2026-02-20",
+        "sector": "FDM",
+        "fileTypes": {
+            "profileImportBucket": "*.3mf, *.json",
+            "gcodeExportBucket": "*.gcode"
+        },
+        "adapterFeatures": {
+            "validateFile": true,
+            "importLayer": true,
+            "exportProfile": true,
+            "importProfile": false
+        }
+    },
+    "schemas": [
+        {
+            "id": "v0.1",
+            "version": "0.1",
+            "releaseDate": "2026-02-20"
+        }
+    ]
+}
