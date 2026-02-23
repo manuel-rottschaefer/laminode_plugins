@@ -7,7 +7,8 @@
             "The Laminode AI"
         ],
         "lastUpdated": "2026-02-21",
-        "targetAppName": "OrcaSlicer"
+        "targetAppName": "OrcaSlicer",
+        "id": "90c2c2c6-8094-4165-b451-1dce1e7d768b"
     },
     "quantities": {
         "length": {
@@ -28,28 +29,28 @@
             "id": "acceleration",
             "type": "numeric",
             "unit": "millimeter/second^2",
-            "symbol": "mm/s\u00b2",
+            "symbol": "mm/s²",
             "title": "Acceleration"
         },
         "jerk": {
             "id": "jerk",
             "type": "numeric",
             "unit": "millimeter/second^3",
-            "symbol": "mm/s\u00b3",
+            "symbol": "mm/s³",
             "title": "Jerk"
         },
         "temperature": {
             "id": "temperature",
             "type": "numeric",
             "unit": "celsius",
-            "symbol": "\u00b0C",
+            "symbol": "°C",
             "title": "Temperature"
         },
         "volumetric_flow": {
             "id": "volumetric_flow",
             "type": "numeric",
             "unit": "cubic millimeter/second",
-            "symbol": "mm\u00b3/s",
+            "symbol": "mm³/s",
             "title": "Volumetric Flow"
         },
         "boolean": {
@@ -101,7 +102,7 @@
             "id": "angle",
             "type": "numeric",
             "unit": "degree",
-            "symbol": "\u00b0",
+            "symbol": "°",
             "title": "Angle"
         }
     },
@@ -3481,7 +3482,7 @@
         {
             "name": "infill_overhang_angle",
             "title": "Infill overhang angle",
-            "description": "The angle of the infill angled lines. 60\u00b0 will result in a pure honeycomb.",
+            "description": "The angle of the infill angled lines. 60° will result in a pure honeycomb.",
             "category": "Strength_Infill",
             "quantityIds": [
                 "angle"
@@ -6121,7 +6122,7 @@
         {
             "name": "travel_slope",
             "title": "Traveling angle",
-            "description": "Traveling angle for Slope and Spiral Z-hop type. Setting it to 90\u00b0 results in Normal Lift.",
+            "description": "Traveling angle for Slope and Spiral Z-hop type. Setting it to 90° results in Normal Lift.",
             "category": "Support_General",
             "quantityIds": [
                 "count"
