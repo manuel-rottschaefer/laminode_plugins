@@ -213,9 +213,25 @@ def convert_settings(
                     options = {str(k): (v if isinstance(v, str) else str(v)) for k, v in raw_options.items()}
                 elif isinstance(raw_options, list):
                     options = {str(e): str(e) for e in raw_options}
+            # Prefer quantity inference from explicit units/types. Only fall
+            # back to name-based heuristics when unit is present or the
+            # parameter type is not clearly an integer/count. This avoids
+            # classifying unit-less integer parameters (e.g. number of
+            # layers) as a `speed` quantity just because the identifier
+            # contains the word "speed".
+            unit_present = bool(value.get("unit"))
+            # Determine if Cura type or mapped type indicates an integer/count
+            cura_type_lower = str(cura_type).lower() if cura_type is not None else ""
+            mapped_type = type_mapping.get(cura_type) if cura_type in type_mapping else None
+            integer_like = False
+            if cura_type_lower in ("int", "integer"):
+                integer_like = True
+            if isinstance(mapped_type, str) and mapped_type in ("integer", "count"):
+                integer_like = True
+
             if any(k in name_low for k in ["height", "width", "distance", "length", "area", "size", "offset", "clearance", "spacing"]):
                 qty_id = "length"
-            elif "speed" in name_low:
+            elif "speed" in name_low and (unit_present or not integer_like):
                 qty_id = "speed"
             elif "accel" in name_low:
                 qty_id = "acceleration"

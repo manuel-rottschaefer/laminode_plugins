@@ -1,0 +1,1320 @@
+[
+    {
+        "name": "retraction_min_travel",
+        "enabledCondition": {
+            "target": "retraction_min_travel",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_amount",
+        "enabledCondition": {
+            "target": "retraction_amount",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_z_hop",
+        "enabledCondition": {
+            "target": "retraction_z_hop",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_at_layer_change",
+        "enabledCondition": {
+            "target": "retract_at_layer_change",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_speed",
+        "enabledCondition": {
+            "target": "retraction_speed",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_before_wipe",
+        "enabledCondition": {
+            "target": "retract_before_wipe",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_min_travel",
+        "enabledCondition": {
+            "target": "retract_min_travel",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "travel_retract_before_outer_wall",
+        "enabledCondition": {
+            "target": "travel_retract_before_outer_wall",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_count_max",
+        "enabledCondition": {
+            "target": "retraction_count_max",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_extra_prime_amount",
+        "enabledCondition": {
+            "target": "retraction_extra_prime_amount",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_hop_enable",
+        "enabledCondition": {
+            "target": "retraction_hop_enable",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "travel_avoid_supports",
+        "enabledCondition": {
+            "target": "travel_avoid_supports",
+            "expression": "travel_avoid_distance > 0"
+        },
+        "ancestors": [
+            "travel_avoid_distance"
+        ]
+    },
+    {
+        "name": "travel_avoid_other_parts",
+        "enabledCondition": {
+            "target": "travel_avoid_other_parts",
+            "expression": "travel_avoid_distance > 0"
+        },
+        "ancestors": [
+            "travel_avoid_distance"
+        ]
+    },
+    {
+        "name": "build_plate_adhesion_type",
+        "ancestors": []
+    },
+    {
+        "name": "wall_transition_angle",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "wall_transition_filter_deviation",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "wall_distribution_count",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "optimize_wall_printing_order",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "wall_0_wipe_dist",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "wall_0_inset",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "min_even_wall_line_width",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "min_odd_wall_line_width",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "fill_outline_gaps",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "z_seam_on_vertex",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "z_seam_relative",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "z_seam_position",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "alternate_extra_perimeter",
+        "enabledCondition": {
+            "target": "alternate_extra_perimeter",
+            "expression": "wall_line_count > 1"
+        },
+        "ancestors": [
+            "optimize_wall_printing_order"
+        ]
+    },
+    {
+        "name": "retraction_combing_max_distance",
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_speed",
+        "ancestors": [
+            "retraction_amount"
+        ]
+    },
+    {
+        "name": "retraction_count_max",
+        "ancestors": [
+            "retraction_amount"
+        ]
+    },
+    {
+        "name": "retraction_min_travel",
+        "enabledCondition": {
+            "target": "retraction_min_travel",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_amount",
+        "enabledCondition": {
+            "target": "retraction_amount",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_z_hop",
+        "enabledCondition": {
+            "target": "retraction_z_hop",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_at_layer_change",
+        "enabledCondition": {
+            "target": "retract_at_layer_change",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_speed",
+        "enabledCondition": {
+            "target": "retraction_speed",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_before_wipe",
+        "enabledCondition": {
+            "target": "retract_before_wipe",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retract_min_travel",
+        "enabledCondition": {
+            "target": "retract_min_travel",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "travel_retract_before_outer_wall",
+        "enabledCondition": {
+            "target": "travel_retract_before_outer_wall",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_count_max",
+        "enabledCondition": {
+            "target": "retraction_count_max",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_extra_prime_amount",
+        "enabledCondition": {
+            "target": "retraction_extra_prime_amount",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_hop_enable",
+        "enabledCondition": {
+            "target": "retraction_hop_enable",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "travel_avoid_supports",
+        "enabledCondition": {
+            "target": "travel_avoid_supports",
+            "expression": "travel_avoid_distance > 0"
+        },
+        "ancestors": [
+            "travel_avoid_distance"
+        ]
+    },
+    {
+        "name": "travel_avoid_other_parts",
+        "enabledCondition": {
+            "target": "travel_avoid_other_parts",
+            "expression": "travel_avoid_distance > 0"
+        },
+        "ancestors": [
+            "travel_avoid_distance"
+        ]
+    },
+    {
+        "name": "build_plate_adhesion_type",
+        "ancestors": []
+    },
+    {
+        "name": "wall_transition_angle",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "wall_transition_filter_deviation",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "wall_distribution_count",
+        "ancestors": [
+            "wall_transition_length"
+        ]
+    },
+    {
+        "name": "optimize_wall_printing_order",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "wall_0_wipe_dist",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "wall_0_inset",
+        "ancestors": [
+            "inset_direction"
+        ]
+    },
+    {
+        "name": "min_even_wall_line_width",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "min_odd_wall_line_width",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "fill_outline_gaps",
+        "ancestors": [
+            "min_wall_line_width"
+        ]
+    },
+    {
+        "name": "z_seam_on_vertex",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "z_seam_relative",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "z_seam_position",
+        "ancestors": [
+            "z_seam_type"
+        ]
+    },
+    {
+        "name": "alternate_extra_perimeter",
+        "enabledCondition": {
+            "target": "alternate_extra_perimeter",
+            "expression": "wall_line_count > 1"
+        },
+        "ancestors": [
+            "optimize_wall_printing_order"
+        ]
+    },
+    {
+        "name": "retraction_combing_max_distance",
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
+        "name": "retraction_speed",
+        "ancestors": [
+            "retraction_amount"
+        ]
+    },
+    {
+        "name": "retraction_count_max",
+        "ancestors": [
+            "retraction_amount"
+        ]
+    },
+    {
+        "name": "support_enable",
+        "ancestors": []
+    },
+    {
+        "name": "support_structure",
+        "enabledCondition": {
+            "target": "support_structure",
+            "expression": "support_enable"
+        },
+        "ancestors": [
+            "support_enable"
+        ]
+    },
+    {
+        "name": "support_type",
+        "enabledCondition": {
+            "target": "support_type",
+            "expression": "support_enable"
+        },
+        "ancestors": [
+            "support_structure"
+        ]
+    },
+    {
+        "name": "support_angle",
+        "enabledCondition": {
+            "target": "support_angle",
+            "expression": "support_enable"
+        },
+        "ancestors": [
+            "support_structure"
+        ]
+    },
+    {
+        "name": "support_use_towers",
+        "enabledCondition": {
+            "target": "support_use_towers",
+            "expression": "support_enable && support_structure === 'normal'"
+        },
+        "ancestors": [
+            "support_structure"
+        ]
+    },
+    {
+        "name": "support_tower_diameter",
+        "enabledCondition": {
+            "target": "support_tower_diameter",
+            "expression": "support_enable && support_structure === 'normal' && support_use_towers"
+        },
+        "ancestors": [
+            "support_use_towers"
+        ]
+    },
+    {
+        "name": "support_tower_maximum_supported_diameter",
+        "enabledCondition": {
+            "target": "support_tower_maximum_supported_diameter",
+            "expression": "support_enable && support_structure === 'normal' && support_use_towers"
+        },
+        "ancestors": [
+            "support_use_towers"
+        ]
+    },
+    {
+        "name": "support_tower_roof_angle",
+        "enabledCondition": {
+            "target": "support_tower_roof_angle",
+            "expression": "support_enable && support_structure === 'normal' && support_use_towers"
+        },
+        "ancestors": [
+            "support_use_towers"
+        ]
+    },
+    {
+        "name": "support_mesh_drop_down",
+        "enabledCondition": {
+            "target": "support_mesh_drop_down",
+            "expression": "support_mesh"
+        },
+        "ancestors": [
+            "support_enable"
+        ]
+    },
+    {
+        "name": "support_meshes_present",
+        "ancestors": []
+    },
+    {
+        "name": "support_extruder_nr",
+        "enabledCondition": {
+            "target": "support_extruder_nr",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1"
+        },
+        "ancestors": []
+    },
+    {
+        "name": "support_infill_extruder_nr",
+        "enabledCondition": {
+            "target": "support_infill_extruder_nr",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1"
+        },
+        "ancestors": [
+            "support_extruder_nr"
+        ]
+    },
+    {
+        "name": "support_extruder_nr_layer_0",
+        "enabledCondition": {
+            "target": "support_extruder_nr_layer_0",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1"
+        },
+        "ancestors": [
+            "support_extruder_nr"
+        ]
+    },
+    {
+        "name": "support_interface_extruder_nr",
+        "enabledCondition": {
+            "target": "support_interface_extruder_nr",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1 && support_interface_enable"
+        },
+        "ancestors": [
+            "support_extruder_nr"
+        ]
+    },
+    {
+        "name": "support_roof_extruder_nr",
+        "enabledCondition": {
+            "target": "support_roof_extruder_nr",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1 && support_roof_enable"
+        },
+        "ancestors": [
+            "support_interface_extruder_nr"
+        ]
+    },
+    {
+        "name": "support_bottom_extruder_nr",
+        "enabledCondition": {
+            "target": "support_bottom_extruder_nr",
+            "expression": "(support_enable || support_meshes_present) && extruders_enabled_count > 1 && support_bottom_enable"
+        },
+        "ancestors": [
+            "support_interface_extruder_nr"
+        ]
+    },
+    {
+        "name": "support_pattern",
+        "enabledCondition": {
+            "target": "support_pattern",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": []
+    },
+    {
+        "name": "support_infill_rate",
+        "enabledCondition": {
+            "target": "support_infill_rate",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "support_line_distance",
+        "enabledCondition": {
+            "target": "support_line_distance",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_infill_rate"
+        ]
+    },
+    {
+        "name": "support_initial_layer_line_distance",
+        "enabledCondition": {
+            "target": "support_initial_layer_line_distance",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_line_distance"
+        ]
+    },
+    {
+        "name": "support_wall_count",
+        "enabledCondition": {
+            "target": "support_wall_count",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "zig_zaggify_support",
+        "enabledCondition": {
+            "target": "zig_zaggify_support",
+            "expression": "(support_enable || support_meshes_present) && (support_pattern === 'lines' || support_pattern === 'grid' || support_pattern === 'triangles' || support_pattern === 'cross' || support_pattern === 'gyroid')"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "support_connect_zigzags",
+        "enabledCondition": {
+            "target": "support_connect_zigzags",
+            "expression": "(support_enable || support_meshes_present) && support_pattern === 'zigzag'"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "support_infill_angles",
+        "enabledCondition": {
+            "target": "support_infill_angles",
+            "expression": "(support_enable || support_meshes_present) && support_pattern !== 'concentric' && support_infill_rate > 0"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "gradual_support_infill_steps",
+        "enabledCondition": {
+            "target": "gradual_support_infill_steps",
+            "expression": "(support_enable || support_meshes_present) && support_infill_rate > 0"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "gradual_support_infill_step_height",
+        "enabledCondition": {
+            "target": "gradual_support_infill_step_height",
+            "expression": "(support_enable || support_meshes_present) && support_infill_rate > 0 && gradual_support_infill_steps > 0"
+        },
+        "ancestors": [
+            "gradual_support_infill_steps"
+        ]
+    },
+    {
+        "name": "support_infill_sparse_thickness",
+        "enabledCondition": {
+            "target": "support_infill_sparse_thickness",
+            "expression": "(support_enable || support_meshes_present) && support_infill_rate > 0"
+        },
+        "ancestors": [
+            "support_infill_rate"
+        ]
+    },
+    {
+        "name": "minimum_support_area",
+        "enabledCondition": {
+            "target": "minimum_support_area",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "support_infill_density_multiplier_initial_layer",
+        "enabledCondition": {
+            "target": "support_infill_density_multiplier_initial_layer",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_infill_rate"
+        ]
+    },
+    {
+        "name": "support_brim_enable",
+        "enabledCondition": {
+            "target": "support_brim_enable",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_pattern"
+        ]
+    },
+    {
+        "name": "support_brim_width",
+        "enabledCondition": {
+            "target": "support_brim_width",
+            "expression": "(support_enable || support_meshes_present) && support_brim_enable"
+        },
+        "ancestors": [
+            "support_brim_enable"
+        ]
+    },
+    {
+        "name": "support_brim_line_count",
+        "enabledCondition": {
+            "target": "support_brim_line_count",
+            "expression": "(support_enable || support_meshes_present) && support_brim_enable"
+        },
+        "ancestors": [
+            "support_brim_width"
+        ]
+    },
+    {
+        "name": "support_tree_angle",
+        "enabledCondition": {
+            "target": "support_tree_angle",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": []
+    },
+    {
+        "name": "support_tree_angle_slow",
+        "enabledCondition": {
+            "target": "support_tree_angle_slow",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_angle"
+        ]
+    },
+    {
+        "name": "support_tree_branch_diameter",
+        "enabledCondition": {
+            "target": "support_tree_branch_diameter",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_angle"
+        ]
+    },
+    {
+        "name": "support_tree_max_diameter",
+        "enabledCondition": {
+            "target": "support_tree_max_diameter",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_branch_diameter"
+        ]
+    },
+    {
+        "name": "support_tree_branch_diameter_angle",
+        "enabledCondition": {
+            "target": "support_tree_branch_diameter_angle",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_branch_diameter"
+        ]
+    },
+    {
+        "name": "support_tree_tip_diameter",
+        "enabledCondition": {
+            "target": "support_tree_tip_diameter",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_branch_diameter"
+        ]
+    },
+    {
+        "name": "support_tree_bp_diameter",
+        "enabledCondition": {
+            "target": "support_tree_bp_diameter",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_branch_diameter"
+        ]
+    },
+    {
+        "name": "support_tree_top_rate",
+        "enabledCondition": {
+            "target": "support_tree_top_rate",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_angle"
+        ]
+    },
+    {
+        "name": "support_tree_limit_branch_reach",
+        "enabledCondition": {
+            "target": "support_tree_limit_branch_reach",
+            "expression": "support_enable && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_angle"
+        ]
+    },
+    {
+        "name": "support_tree_branch_reach_limit",
+        "enabledCondition": {
+            "target": "support_tree_branch_reach_limit",
+            "expression": "support_enable && support_tree_limit_branch_reach && support_structure === 'tree'"
+        },
+        "ancestors": [
+            "support_tree_limit_branch_reach"
+        ]
+    },
+    {
+        "name": "support_tree_rest_preference",
+        "enabledCondition": {
+            "target": "support_tree_rest_preference",
+            "expression": "support_enable && support_structure === 'tree' && support_type === 'everywhere'"
+        },
+        "ancestors": [
+            "support_tree_limit_branch_reach"
+        ]
+    },
+    {
+        "name": "support_tree_min_height_to_model",
+        "enabledCondition": {
+            "target": "support_tree_min_height_to_model",
+            "expression": "support_enable && support_structure === 'tree' && resolveOrValue('support_type') === 'everywhere'"
+        },
+        "ancestors": [
+            "support_tree_angle"
+        ]
+    },
+    {
+        "name": "support_tree_max_diameter_increase_by_merges_when_support_to_model",
+        "enabledCondition": {
+            "target": "support_tree_max_diameter_increase_by_merges_when_support_to_model",
+            "expression": "support_enable && support_structure === 'tree' && resolveOrValue('support_type') === 'everywhere'"
+        },
+        "ancestors": [
+            "support_tree_max_diameter"
+        ]
+    },
+    {
+        "name": "support_z_distance",
+        "enabledCondition": {
+            "target": "support_z_distance",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": []
+    },
+    {
+        "name": "support_top_distance",
+        "enabledCondition": {
+            "target": "support_top_distance",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_bottom_distance",
+        "enabledCondition": {
+            "target": "support_bottom_distance",
+            "expression": "(support_enable || support_meshes_present) && resolveOrValue('support_type') === 'everywhere'"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_xy_distance",
+        "enabledCondition": {
+            "target": "support_xy_distance",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_xy_overrides_z",
+        "enabledCondition": {
+            "target": "support_xy_overrides_z",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_xy_distance"
+        ]
+    },
+    {
+        "name": "support_xy_distance_overhang",
+        "enabledCondition": {
+            "target": "support_xy_distance_overhang",
+            "expression": "(support_enable || support_meshes_present) && support_xy_overrides_z === 'z_overrides_xy'"
+        },
+        "ancestors": [
+            "support_xy_distance"
+        ]
+    },
+    {
+        "name": "support_offset",
+        "enabledCondition": {
+            "target": "support_offset",
+            "expression": "(support_enable || support_meshes_present) && support_structure === 'normal'"
+        },
+        "ancestors": [
+            "support_xy_distance"
+        ]
+    },
+    {
+        "name": "support_join_distance",
+        "enabledCondition": {
+            "target": "support_join_distance",
+            "expression": "(support_enable && support_structure === 'normal') || support_meshes_present"
+        },
+        "ancestors": [
+            "support_xy_distance"
+        ]
+    },
+    {
+        "name": "support_bottom_stair_step_height",
+        "enabledCondition": {
+            "target": "support_bottom_stair_step_height",
+            "expression": "((support_enable && support_structure === 'normal') || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_bottom_stair_step_width",
+        "enabledCondition": {
+            "target": "support_bottom_stair_step_width",
+            "expression": "((support_enable && support_structure === 'normal') || support_meshes_present) && support_bottom_stair_step_height > 0"
+        },
+        "ancestors": [
+            "support_bottom_stair_step_height"
+        ]
+    },
+    {
+        "name": "support_bottom_stair_step_min_slope",
+        "enabledCondition": {
+            "target": "support_bottom_stair_step_min_slope",
+            "expression": "((support_enable && support_structure === 'normal') || support_meshes_present) && support_bottom_stair_step_height > 0"
+        },
+        "ancestors": [
+            "support_bottom_stair_step_height"
+        ]
+    },
+    {
+        "name": "support_z_seam_away_from_model",
+        "enabledCondition": {
+            "target": "support_z_seam_away_from_model",
+            "expression": "support_enable"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_z_seam_min_distance",
+        "enabledCondition": {
+            "target": "support_z_seam_min_distance",
+            "expression": "support_z_seam_away_from_model && support_enable"
+        },
+        "ancestors": [
+            "support_z_seam_away_from_model"
+        ]
+    },
+    {
+        "name": "support_fan_enable",
+        "enabledCondition": {
+            "target": "support_fan_enable",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_supported_skin_fan_speed",
+        "enabledCondition": {
+            "target": "support_supported_skin_fan_speed",
+            "expression": "(support_enable || support_meshes_present) && support_fan_enable"
+        },
+        "ancestors": [
+            "support_fan_enable"
+        ]
+    },
+    {
+        "name": "support_interface_enable",
+        "enabledCondition": {
+            "target": "support_interface_enable",
+            "expression": "support_enable || support_meshes_present"
+        },
+        "ancestors": [
+            "support_z_distance"
+        ]
+    },
+    {
+        "name": "support_roof_enable",
+        "enabledCondition": {
+            "target": "support_roof_enable",
+            "expression": "(support_enable || support_meshes_present) && support_interface_enable"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_bottom_enable",
+        "enabledCondition": {
+            "target": "support_bottom_enable",
+            "expression": "(support_enable || support_meshes_present) && support_interface_enable"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_interface_height",
+        "enabledCondition": {
+            "target": "support_interface_height",
+            "expression": "support_interface_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_roof_height",
+        "enabledCondition": {
+            "target": "support_roof_height",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_height"
+        ]
+    },
+    {
+        "name": "support_bottom_height",
+        "enabledCondition": {
+            "target": "support_bottom_height",
+            "expression": "support_bottom_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_height"
+        ]
+    },
+    {
+        "name": "support_interface_density",
+        "enabledCondition": {
+            "target": "support_interface_density",
+            "expression": "support_interface_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_roof_density",
+        "enabledCondition": {
+            "target": "support_roof_density",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_density"
+        ]
+    },
+    {
+        "name": "support_roof_line_distance",
+        "enabledCondition": {
+            "target": "support_roof_line_distance",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_roof_density"
+        ]
+    },
+    {
+        "name": "support_bottom_density",
+        "enabledCondition": {
+            "target": "support_bottom_density",
+            "expression": "support_bottom_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_density"
+        ]
+    },
+    {
+        "name": "support_bottom_line_distance",
+        "enabledCondition": {
+            "target": "support_bottom_line_distance",
+            "expression": "support_bottom_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_bottom_density"
+        ]
+    },
+    {
+        "name": "support_interface_pattern",
+        "enabledCondition": {
+            "target": "support_interface_pattern",
+            "expression": "support_interface_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_roof_pattern",
+        "enabledCondition": {
+            "target": "support_roof_pattern",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_pattern"
+        ]
+    },
+    {
+        "name": "support_bottom_pattern",
+        "enabledCondition": {
+            "target": "support_bottom_pattern",
+            "expression": "support_bottom_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_pattern"
+        ]
+    },
+    {
+        "name": "minimum_interface_area",
+        "enabledCondition": {
+            "target": "minimum_interface_area",
+            "expression": "support_interface_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "minimum_roof_area",
+        "enabledCondition": {
+            "target": "minimum_roof_area",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "minimum_interface_area"
+        ]
+    },
+    {
+        "name": "minimum_bottom_area",
+        "enabledCondition": {
+            "target": "minimum_bottom_area",
+            "expression": "support_bottom_enable && ((support_enable && support_structure === 'normal') || support_meshes_present)"
+        },
+        "ancestors": [
+            "minimum_interface_area"
+        ]
+    },
+    {
+        "name": "support_interface_offset",
+        "enabledCondition": {
+            "target": "support_interface_offset",
+            "expression": "support_interface_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_roof_offset",
+        "enabledCondition": {
+            "target": "support_roof_offset",
+            "expression": "support_roof_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_offset"
+        ]
+    },
+    {
+        "name": "support_bottom_offset",
+        "enabledCondition": {
+            "target": "support_bottom_offset",
+            "expression": "support_bottom_enable && (support_enable || support_meshes_present)"
+        },
+        "ancestors": [
+            "support_interface_offset"
+        ]
+    },
+    {
+        "name": "support_interface_priority",
+        "enabledCondition": {
+            "target": "support_interface_priority",
+            "expression": "support_enable && support_structure === 'tree' && support_roof_enable"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_interface_angles",
+        "enabledCondition": {
+            "target": "support_interface_angles",
+            "expression": "(support_enable || support_meshes_present) && support_interface_enable && support_interface_pattern !== 'concentric'"
+        },
+        "ancestors": [
+            "support_interface_pattern"
+        ]
+    },
+    {
+        "name": "support_roof_angles",
+        "enabledCondition": {
+            "target": "support_roof_angles",
+            "expression": "(support_enable || support_meshes_present) && support_roof_enable && support_roof_pattern !== 'concentric'"
+        },
+        "ancestors": [
+            "support_interface_angles"
+        ]
+    },
+    {
+        "name": "support_bottom_angles",
+        "enabledCondition": {
+            "target": "support_bottom_angles",
+            "expression": "(support_enable || support_meshes_present) && support_bottom_enable && support_bottom_pattern !== 'concentric'"
+        },
+        "ancestors": [
+            "support_interface_angles"
+        ]
+    },
+    {
+        "name": "support_interface_wall_count",
+        "enabledCondition": {
+            "target": "support_interface_wall_count",
+            "expression": "(support_enable && support_interface_enable) || support_meshes_present"
+        },
+        "ancestors": [
+            "support_interface_enable"
+        ]
+    },
+    {
+        "name": "support_roof_wall_count",
+        "enabledCondition": {
+            "target": "support_roof_wall_count",
+            "expression": "(support_enable && support_interface_enable) || support_meshes_present"
+        },
+        "ancestors": [
+            "support_interface_wall_count"
+        ]
+    },
+    {
+        "name": "support_bottom_wall_count",
+        "enabledCondition": {
+            "target": "support_bottom_wall_count",
+            "expression": "(support_enable && support_interface_enable) || support_meshes_present"
+        },
+        "ancestors": [
+            "support_interface_wall_count"
+        ]
+    }
+]

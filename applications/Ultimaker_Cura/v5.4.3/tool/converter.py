@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from copy import deepcopy
 
 # script_dir must be available early for fallback imports
 script_dir = Path(__file__).resolve().parent
@@ -51,6 +52,20 @@ QUIET = False
 def log(msg: str) -> None:
     if not QUIET:
         print(msg)
+
+
+def deep_update(dst: Dict[str, Any], src: Dict[str, Any]) -> None:
+    """Recursively update mapping `dst` with values from `src`.
+
+    - If both `dst[k]` and `src[k]` are dicts, recurse.
+    - Otherwise `src[k]` replaces `dst[k]` (deep-copied when appropriate).
+    """
+    for k, v in src.items():
+        if k in dst and isinstance(dst[k], dict) and isinstance(v, dict):
+            deep_update(dst[k], v)
+        else:
+            # Use deepcopy to avoid referencing input structures
+            dst[k] = deepcopy(v)
 
 def match_ancestors_by_title(parameters: List[Dict[str, Any]]) -> None:
     """Post-process parameters to infer parent-child relations from titles.
@@ -152,30 +167,59 @@ def main():
     schema['quantities'] = quantities
     schema['categories'] = categories
     schema['availableParameters'] = parameters
+    # Prepare raw copy before applying any overrides
+    schema_raw = deepcopy(schema)
 
-    # If user specified an output path, write only there (file or directory).
-    if user_output:
-        outp = Path(user_output)
-        if outp.suffix:  # treat as a file when extension present
-            outp.parent.mkdir(parents=True, exist_ok=True)
-            with outp.open("w", encoding="utf-8") as f:
-                json.dump(schema, f, indent=4, ensure_ascii=False)
-            log(f"Wrote schema to {outp}")
-        else:
-            outp.mkdir(parents=True, exist_ok=True)
-            final_output_path = outp / "schema.json"
-            with final_output_path.open("w", encoding="utf-8") as f:
-                json.dump(schema, f, indent=4, ensure_ascii=False)
-            log(f"Wrote schema to {final_output_path}")
+    # Load overrides if available and apply to a copy of schema
+    overrides_path = assets_dir / "overrides.json"
+    schema_assembly = deepcopy(schema)
+    if overrides_path.exists():
+        try:
+            with overrides_path.open("r", encoding="utf-8") as f:
+                overrides = json.load(f)
+            # Apply overrides to parameters by matching `name` field
+            name_to_param = {p['name']: p for p in schema_assembly.get('availableParameters', [])}
+            for ov in overrides:
+                target_name = ov.get('name')
+                if not target_name:
+                    continue
+                param = name_to_param.get(target_name)
+                if not param:
+                    log(f"Warning: override for unknown parameter '{target_name}'")
+                    continue
+                # Merge override keys (recursive): support partial nested updates
+                for k, v in ov.items():
+                    if k == 'name':
+                        continue
+                    if isinstance(v, dict) and isinstance(param.get(k), dict):
+                        deep_update(param[k], v)
+                    else:
+                        param[k] = deepcopy(v)
+            log(f"Applied {len(overrides)} overrides from {overrides_path}")
+        except Exception as e:
+            log(f"Failed to load overrides from {overrides_path}: {e}")
     else:
-        # Default: write compatibility versions into ../schemas/<version>/schema.json
-        for version in ["v0.1", "v5.4.3"]:
-            output_dir = script_dir.parent / "schemas" / version
-            output_dir.mkdir(parents=True, exist_ok=True)
-            final_output_path = output_dir / "schema.json"
-            with final_output_path.open("w", encoding="utf-8") as f:
-                json.dump(schema, f, indent=4, ensure_ascii=False)
-            log(f"Wrote schema to {final_output_path}")
+        log(f"No overrides file found at {overrides_path}")
+
+    # Ensure the dedicated `output` folder contains only raw and assembly files
+    output_folder = script_dir / "output"
+    output_folder.mkdir(parents=True, exist_ok=True)
+    raw_output_path = output_folder / "schema_raw.json"
+    assembly_output_path = output_folder / "schema_assembly.json"
+    with raw_output_path.open("w", encoding="utf-8") as f:
+        json.dump(schema_raw, f, indent=4, ensure_ascii=False)
+    with assembly_output_path.open("w", encoding="utf-8") as f:
+        json.dump(schema_assembly, f, indent=4, ensure_ascii=False)
+    log(f"Wrote schema_raw to {raw_output_path}")
+    log(f"Wrote schema_assembly to {assembly_output_path}")
+
+    # Per configuration: do not generate any `schema.json` files.
+    # `tool/output/` is the only output folder and already contains
+    # `schema_raw.json` and `schema_assembly.json`.
+    if user_output:
+        log(f"User requested output path '{user_output}', but schema.json generation is disabled.")
+    else:
+        log("Skipping generation of schema.json files (only raw/assembly outputs are written).")
 
     log(f" - Categories: {len(categories)}")
     log(f" - Parameters: {len(parameters)}")

@@ -7,8 +7,7 @@
             "The Laminode Team"
         ],
         "targetAppName": "Ultimaker Cura",
-        "lastUpdated": "2026-02-21",
-        "id": "17c2ed4f-771e-407c-87cd-03359aac2c04"
+        "lastUpdated": "2026-02-26"
     },
     "quantities": {
         "length": {
@@ -6137,7 +6136,7 @@
             "description": "The first few layers are printed slower than the rest of the model, to get better adhesion to the build plate and improve the overall success rate of prints. The speed is gradually increased over these layers.",
             "category": "speed",
             "quantityIds": [
-                "speed"
+                "count"
             ],
             "defaultValue": {
                 "target": "speed_slowdown_layers",

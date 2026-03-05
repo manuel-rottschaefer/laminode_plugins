@@ -9,11 +9,12 @@
         "targetAppSector": "FDM",
         "id": "13dfc39a-4995-4e63-8e8d-15cb08f080d4"
     },
-    "availableParameters": [
-        {
-            "name": "global_parameter_one",
-            "title": "Global Parameter One",
-            "description": "This is a standard global parameter for FDM printing."
+    "quantities": {
+        "count": {
+            "id": "count",
+            "type": "numeric",
+            "title": "Count"
         }
-    ]
+    },
+    "availableParameters": []
 }
