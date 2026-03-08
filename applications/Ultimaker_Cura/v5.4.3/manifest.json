@@ -31,16 +31,6 @@
             "id": "v1",
             "version": "1.0",
             "releaseDate": "2026-02-22"
-        },
-        {
-            "id": "v0.2",
-            "version": "0.2",
-            "releaseDate": "2026-03-15"
-        },
-        {
-            "id": "v0.3",
-            "version": "0.3",
-            "releaseDate": "2026-04-10"
         }
     ]
 }

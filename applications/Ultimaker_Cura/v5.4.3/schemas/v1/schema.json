@@ -111,119 +111,119 @@
             "title": "Build Plate Adhesion",
             "role": "buildJob",
             "parent": null,
-            "color": "red"
+            "color": "#F3BDCC"
         },
         {
             "name": "command_line_settings",
             "title": "Command Line Settings",
             "role": "buildJob",
             "parent": null,
-            "color": "crimson"
+            "color": "#BDC6F3"
         },
         {
             "name": "cooling",
             "title": "Cooling",
             "role": "buildJob",
             "parent": null,
-            "color": "deepOrange"
+            "color": "#BDEEF3"
         },
         {
             "name": "dual",
             "title": "Dual Extrusion",
             "role": "buildJob",
             "parent": null,
-            "color": "orange"
+            "color": "#E4BDF3"
         },
         {
             "name": "experimental",
             "title": "Experimental",
             "role": "machine",
             "parent": null,
-            "color": "amber"
+            "color": "#F2F3BD"
         },
         {
             "name": "infill",
             "title": "Infill",
             "role": "buildJob",
             "parent": null,
-            "color": "gold"
+            "color": "#F3CCBD"
         },
         {
             "name": "machine_settings",
             "title": "Machine",
             "role": "buildJob",
             "parent": null,
-            "color": "yellow"
+            "color": "#F3E9BD"
         },
         {
             "name": "material",
             "title": "Material",
             "role": "buildJob",
             "parent": null,
-            "color": "lime"
+            "color": "#BDF3D4"
         },
         {
             "name": "meshfix",
             "title": "Mesh Fixes",
             "role": "buildJob",
             "parent": null,
-            "color": "lightGreen"
+            "color": "#EBBDF3"
         },
         {
             "name": "ppr",
             "title": "Print Process Reporting",
             "role": "buildJob",
             "parent": null,
-            "color": "green"
+            "color": "#CFF3BD"
         },
         {
             "name": "resolution",
             "title": "Quality",
             "role": "buildJob",
             "parent": null,
-            "color": "emerald"
+            "color": "#BDF3DB"
         },
         {
             "name": "blackmagic",
             "title": "Special Modes",
             "role": "buildJob",
             "parent": null,
-            "color": "teal"
+            "color": "#F3BDF0"
         },
         {
             "name": "speed",
             "title": "Speed",
             "role": "buildJob",
             "parent": null,
-            "color": "cyan"
+            "color": "#D5F3BD"
         },
         {
             "name": "support",
             "title": "Support",
             "role": "buildJob",
             "parent": null,
-            "color": "lightBlue"
+            "color": "#BDD1F3"
         },
         {
             "name": "top_bottom",
             "title": "Top/Bottom",
             "role": "buildJob",
             "parent": null,
-            "color": "blue"
+            "color": "#F3D7BD"
         },
         {
             "name": "travel",
             "title": "Travel",
             "role": "buildJob",
             "parent": null,
-            "color": "indigo"
+            "color": "#BDDCF3"
         },
         {
             "name": "shell",
             "title": "Walls",
             "role": "buildJob",
             "parent": null,
-            "color": "deepPurple"
+            "color": "#C7BDF3"
         }
     ],
     "availableParameters": [
