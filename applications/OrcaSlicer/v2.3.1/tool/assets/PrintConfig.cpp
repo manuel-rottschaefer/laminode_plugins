@@ -9971,7 +9971,7 @@ CLIActionsConfigDef::CLIActionsConfigDef()
     def = this->add("pipe", coString);
     def->label = L("Send progress to pipe");
     def->tooltip = L("Send progress to pipe.");
-    def->cli_params = "pipename";
+    def->cli_params = "pip.name";
     def->set_default_value(new ConfigOptionString());
 }
 
