@@ -6,6 +6,6 @@
         "schemaAuthors": [
             "The Laminode Team"
         ],
-        "targetAppName": "Ultimaker Cura"
+        "targetappName": "Ultimaker Cura"
     }
 }

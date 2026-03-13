@@ -6,7 +6,7 @@
         "schemaAuthors": [
             "The Laminode Team"
         ],
-        "targetAppName": "Ultimaker Cura",
+        "targetappName": "Ultimaker Cura",
         "lastUpdated": "2026-02-26"
     },
     "quantities": {
@@ -54,8 +54,7 @@
         },
         "boolean": {
             "id": "boolean",
-            "type": "boolean",
-            "title": "Boolean"
+            "type": "boolean"
         },
         "choice": {
             "id": "choice",

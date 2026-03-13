@@ -80,6 +80,16 @@
         ]
     },
     {
+        "name": "retraction_extrusion_window",
+        "enabledCondition": {
+            "target": "retraction_extrusion_window",
+            "expression": "retraction_enable"
+        },
+        "ancestors": [
+            "retraction_enable"
+        ]
+    },
+    {
         "name": "retraction_count_max",
         "enabledCondition": {
             "target": "retraction_count_max",

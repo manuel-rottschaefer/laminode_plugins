@@ -2,6 +2,7 @@ import re
 import json
 import os
 
+
 def parse_print_config(cpp_file):
     with open(cpp_file, 'r') as f:
         content = f.read()
@@ -16,46 +17,57 @@ def parse_print_config(cpp_file):
     # We use a state-based parser because category is assigned sequentially
     current_category = "Others"
     parameters = []
-    
+
     # Simple regex to find blocks of definitions
     # Match: def = this->add("key", coType); ... def->label = L("label"); ... def->category = L("cat"); ...
-    
+
     blocks = re.split(r'def\s*=\s*this->add\(', content)
     for block in blocks[1:]:
         # Extract key
         key_match = re.search(r'"([^"]+)",\s*(\w+)\)', block)
-        if not key_match: continue
+        if not key_match:
+            continue
         key, co_type = key_match.groups()
-        
+
         # Extract properties
         label_match = re.search(r'def->label\s*=\s*L\("([^"]+)"\)', block)
         label = label_match.group(1) if label_match else key
-        
+
         cat_match = re.search(r'def->category\s*=\s*L\("([^"]+)"\)', block)
         if cat_match:
             current_category = cat_match.group(1)
-            if current_category == "": current_category = "Others"
-            
+            if current_category == "":
+                current_category = "Others"
+
         tooltip_match = re.search(r'def->tooltip\s*=\s*L\("([^"]+)"\)', block)
-        tooltip = tooltip_match.group(1).replace('\\n', ' ') if tooltip_match else ""
-        
+        tooltip = tooltip_match.group(1).replace(
+            '\\n', ' ') if tooltip_match else ""
+
         # Default value
         default_val = "0"
-        default_match = re.search(r'def->set_default_value\(new\s+\w+\(([^)]+)\)\)', block)
+        default_match = re.search(
+            r'def->set_default_value\(new\s+\w+\(([^)]+)\)\)', block)
         if default_match:
-            default_val = default_match.group(1).replace('true', 'True').replace('false', 'False')
+            default_val = default_match.group(1).replace(
+                'true', 'True').replace('false', 'False')
             # Strip extra quotes and casts
-            default_val = re.sub(r'INITIAL_LAYER_HEIGHT|INITIAL_TEMPERATURE|sp\w+', '0', default_val)
+            default_val = re.sub(
+                r'INITIAL_LAYER_HEIGHT|INITIAL_TEMPERATURE|sp\w+', '0', default_val)
             default_val = default_val.strip('"').strip()
 
         # Type mapping
         q_type = "float"
-        if "coBool" in co_type: q_type = "boolean"
-        elif "coInt" in co_type: q_type = "integer"
-        elif "coEnum" in co_type: q_type = "choice"
-        elif "coString" in co_type: q_type = "string"
-        elif "Percent" in co_type: q_type = "numeric"
-        
+        if "coBool" in co_type:
+            q_type = "boolean"
+        elif "coInt" in co_type:
+            q_type = "integer"
+        elif "coEnum" in co_type:
+            q_type = "choice"
+        elif "coString" in co_type:
+            q_type = "string"
+        elif "Percent" in co_type:
+            q_type = "numeric"
+
         parameters.append({
             "name": key,
             "title": label,
@@ -66,6 +78,7 @@ def parse_print_config(cpp_file):
         })
 
     return parameters
+
 
 def generate_schema(params):
     ROOTS = ["Quality", "Strength", "Speed", "Support", "Others", "Advanced"]
@@ -142,19 +155,19 @@ def generate_schema(params):
         "count": {"id": "count", "type": "numeric", "title": "Count"},
         "angle": {"id": "angle", "type": "numeric", "unit": "degree", "symbol": "°", "title": "Angle"},
     }
-    
+
     for p in params:
         orca_cat = p["category"]
-        
+
         # Map some specific Orca categories to our Roots
         if orca_cat == "Machine limits":
             orca_cat = "Others"
         if orca_cat == "Extruders":
             orca_cat = "Support"
-            
+
         if orca_cat not in ROOTS:
             orca_cat = "Others"
-            
+
         target_cat = f"{orca_cat}_General"
         # Try to find a specific hub
         if orca_cat in HUBS_CONFIG:
@@ -162,12 +175,12 @@ def generate_schema(params):
                 if any(k in p["name"].lower() or k in p["title"].lower() for k in keywords):
                     target_cat = f"{orca_cat}_{hub_title}"
                     break
-        
+
         # Determine specific quantity for this parameter
-        p_name = p["name"]
-        p_name_low = p_name.lower()
+       p.paramName = p["name"]
+        p.name_low = p.appName.lower()
         p_type = p["type"]
-        
+
         qty_id = "count"
         options = None
 
@@ -178,33 +191,33 @@ def generate_schema(params):
             options = {"default": "Default"}
         elif p_type == "string":
             qty_id = "string"
-        elif "percent" in p_name_low or p_type == "percentage":
+        elif "percent" in p.name_low or p_type == "percentage":
             qty_id = "percentage"
-        elif "layer_height" in p_name_low or "width" in p_name_low or "distance" in p_name_low or "length" in p_name_low or "offset" in p_name_low or "clearance" in p_name_low or "spacing" in p_name_low:
+        elif "layer_height" in p.name_low or "width" in p.name_low or "distance" in p.name_low or "length" in p.name_low or "offset" in p.name_low or "clearance" in p.name_low or "spacing" in p.name_low:
             qty_id = "length"
-        elif "speed" in p_name_low:
+        elif "speed" in p.name_low:
             qty_id = "speed"
-        elif "accel" in p_name_low:
+        elif "accel" in p.name_low:
             qty_id = "acceleration"
-        elif "jerk" in p_name_low:
+        elif "jerk" in p.name_low:
             qty_id = "jerk"
-        elif "temperature" in p_name_low:
+        elif "temperature" in p.name_low:
             qty_id = "temperature"
-        elif "flow" in p_name_low:
+        elif "flow" in p.name_low:
             qty_id = "volumetric_flow"
-        elif "angle" in p_name_low:
+        elif "angle" in p.name_low:
             qty_id = "angle"
-        elif "time" in p_name_low:
+        elif "time" in p.name_low:
             qty_id = "time"
 
         available_params.append({
-            "name": p_name,
+            "name": p.name,
             "title": p["title"],
             "description": p["description"],
             "category": target_cat,
             "quantityIds": [qty_id],
             "defaultValue": {
-                "target": p_name,
+                "target": p.name,
                 "expression": str(p["defaultValue"])
             },
             "options": options
@@ -217,7 +230,7 @@ def generate_schema(params):
             "schemaVersion": "0.3",
             "schemaAuthors": ["The Laminode AI"],
             "lastUpdated": "2026-02-21",
-            "targetAppName": "OrcaSlicer"
+            "targetappName": "OrcaSlicer"
         },
         "quantities": quantities,
         "categories": categories,
@@ -225,21 +238,23 @@ def generate_schema(params):
     }
     return schema
 
+
 if __name__ == "__main__":
     assets_dir = "/home/manuel/Documents/LamiNode/laminode_plugins/applications/OrcaSlicer/v2.3.1/tool/assets"
     cpp_file = os.path.join(assets_dir, "PrintConfig.cpp")
-    
+
     if os.path.exists(cpp_file):
         params = parse_print_config(cpp_file)
         schema = generate_schema(params)
-        
+
         # Output to BOTH v0.1 and v2.3.1 to ensure backend sees it regardless of manifest state
         for version in ["v0.1", "v2.3.1"]:
             output_dir = f"/home/manuel/Documents/LamiNode/laminode_plugins/applications/OrcaSlicer/v2.3.1/schemas/{version}"
             os.makedirs(output_dir, exist_ok=True)
             with open(os.path.join(output_dir, "schema.json"), "w") as f:
                 json.dump(schema, f, indent=4)
-        
-        print(f"Generated schema with {len(params)} parameters across v0.1 and v2.3.1.")
+
+        print(
+            f"Generated schema with {len(params)} parameters across v0.1 and v2.3.1.")
     else:
         print(f"Error: {cpp_file} not found.")
